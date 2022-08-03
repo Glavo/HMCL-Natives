@@ -1,4 +1,8 @@
+@file:Suppress("UNCHECKED_CAST")
+@file:OptIn(kotlin.ExperimentalStdlibApi::class)
+
 import java.security.*
+import java.util.Properties
 
 buildscript {
     repositories {
@@ -10,9 +14,40 @@ buildscript {
     }
 }
 
-
 plugins {
     id("java")
+}
+
+
+var secretPropsFile = project.rootProject.file("gradle/maven-central-publish.properties")
+if (!secretPropsFile.exists()) {
+    secretPropsFile =
+        file(System.getProperty("user.home")).resolve(".gradle").resolve("maven-central-publish.properties")
+}
+
+if (secretPropsFile.exists()) {
+    // Read local.properties file first if it exists
+    val p = Properties()
+    secretPropsFile.reader().use {
+        p.load(it)
+    }
+
+    p.forEach { (name, value) ->
+        rootProject.ext[name.toString()] = value
+    }
+}
+
+listOf(
+    "sonatypeUsername" to "SONATYPE_USERNAME",
+    "sonatypePassword" to "SONATYPE_PASSWORD",
+    "sonatypeStagingProfileId" to "SONATYPE_STAGING_PROFILE_ID",
+    "signing.keyId" to "SIGNING_KEY_ID",
+    "signing.password" to "SIGNING_PASSWORD",
+    "signing.key" to "SIGNING_KEY"
+).forEach { (p, e) ->
+    if (!rootProject.ext.has(p)) {
+        rootProject.ext[p] = System.getenv(e)
+    }
 }
 
 allprojects {
@@ -141,7 +176,47 @@ rootProject.tasks.create("generateJson") {
                     redirect("$lib:3.3.1:natives-linux", mavenLibrary("$lib:3.3.1:natives-linux-arm64"))
                 }
 
+                // Minecraft 1.6~1.12
+                val lwjgl2Natives = buildMap<String, Any> {
+                    val artifact =
+                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-linux-arm64")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
+
+                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3")
+                    put(
+                        "downloads", mapOf(
+                            "classifiers" to mapOf(
+                                "linux-arm64" to mapOf(
+                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3/lwjgl2-natives-2.9.3-linux-arm64.jar",
+                                    "url" to artifact["url"],
+                                    "sha1" to artifact["sha1"],
+                                    "size" to artifact["size"]
+                                )
+                            )
+                        )
+                    )
+
+                    put(
+                        "extract", mapOf(
+                            "exclude" to listOf("META-INF/")
+                        )
+                    )
+                    put(
+                        "natives", mapOf(
+                            "linux" to "linux-arm64"
+                        )
+                    )
+                }
+
+                for (v in listOf(
+                    "2.9.0",
+                    "2.9.1",
+                    "2.9.4-nightly-20150209"
+                )) {
+                    redirect("org.lwjgl.lwjgl:lwjgl-platform:$v:natives", lwjgl2Natives)
+                }
+
                 redirectAllToEmpty(
+                    "net.java.jinput:jinput-platform:2.0.5:natives",
                     "com.mojang:text2speech:1.10.3:natives",
                     "com.mojang:text2speech:1.11.3:natives",
                     "com.mojang:text2speech:1.12.4:natives",
@@ -167,6 +242,53 @@ rootProject.tasks.create("generateJson") {
                 }
 
                 redirectAllToEmpty(
+                    "com.mojang:text2speech:1.10.3:natives",
+                    "com.mojang:text2speech:1.11.3:natives",
+                    "com.mojang:text2speech:1.12.4:natives",
+                    "com.mojang:text2speech:1.13.9:natives-linux"
+                )
+            },
+            "linux-loongarch64" to buildRedirectMap {
+                // Minecraft 1.6~1.12
+                val lwjgl2Natives = buildMap<String, Any> {
+                    val artifact =
+                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1-linux-loongarch64")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
+
+                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1")
+                    put(
+                        "downloads", mapOf(
+                            "classifiers" to mapOf(
+                                "linux-loongarch64" to mapOf(
+                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3-rc1/lwjgl2-natives-2.9.3-rc1-linux-loongarch64.jar",
+                                    "url" to artifact["url"],
+                                    "sha1" to artifact["sha1"],
+                                    "size" to artifact["size"]
+                                )
+                            )
+                        )
+                    )
+
+                    put(
+                        "extract", mapOf(
+                            "exclude" to listOf("META-INF/")
+                        )
+                    )
+                    put(
+                        "natives", mapOf(
+                            "linux" to "linux-loongarch64"
+                        )
+                    )
+                }
+
+                for (v in listOf(
+                    "2.9.0",
+                    "2.9.1",
+                    "2.9.4-nightly-20150209"
+                )) {
+                    redirect("org.lwjgl.lwjgl:lwjgl-platform:$v:natives", lwjgl2Natives)
+                }
+                redirectAllToEmpty(
+                    "net.java.jinput:jinput-platform:2.0.5:natives",
                     "com.mojang:text2speech:1.10.3:natives",
                     "com.mojang:text2speech:1.11.3:natives",
                     "com.mojang:text2speech:1.12.4:natives",
