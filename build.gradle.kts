@@ -249,6 +249,12 @@ rootProject.tasks.create("generateJson") {
                 )
             },
             "linux-loongarch64" to buildRedirectMap {
+                // Minecraft 1.14 ~ 1.18
+//                for (lib in lwjgl3BaseLibraries) {
+//                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
+//                    redirectToEmpty("$lib:3.2.2:natives")
+//                }
+
                 // Minecraft 1.6~1.12
                 val lwjgl2Natives = buildMap<String, Any> {
                     val artifact =
