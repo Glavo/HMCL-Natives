@@ -25,11 +25,11 @@ tasks.getByName<Test>("test") {
 }
 
 val platforms = listOf(
-    "linux-arm64", "linux-loongarch64"
+    "linux-arm64", "linux-loongarch64_ow"
 )
 
 val platformJarVersion: Map<String, String> = mutableMapOf<String, String>().apply{
-    put("linux-loongarch64", "${project.version}-rc1")
+    put("linux-loongarch64_ow", "${project.version}-rc1")
 
     for (platform in platforms) {
         if (platform !in this)
@@ -109,8 +109,6 @@ for (platform in platforms) {
     tasks.create("$platform-bundleJar") {
         group = "platform jars"
         dependsOn(tasks["publishAllPublicationsToBuildRepository"])
-
-
     }
 }
 

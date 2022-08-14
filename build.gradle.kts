@@ -248,7 +248,7 @@ rootProject.tasks.create("generateJson") {
                     "com.mojang:text2speech:1.13.9:natives-linux"
                 )
             },
-            "linux-loongarch64" to buildRedirectMap {
+            "linux-loongarch64_ow" to buildRedirectMap {
                 // Minecraft 1.14 ~ 1.18
 //                for (lib in lwjgl3BaseLibraries) {
 //                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
@@ -293,6 +293,11 @@ rootProject.tasks.create("generateJson") {
                 )) {
                     redirect("org.lwjgl.lwjgl:lwjgl-platform:$v:natives", lwjgl2Natives)
                 }
+
+                for (lib in lwjgl3BaseLibraries) {
+                    redirectToEmpty("$lib:3.3.1:natives-linux")
+                }
+
                 redirectAllToEmpty(
                     "net.java.jinput:jinput-platform:2.0.5:natives",
                     "com.mojang:text2speech:1.10.3:natives",
