@@ -249,12 +249,6 @@ rootProject.tasks.create("generateJson") {
                 )
             },
             "linux-loongarch64_ow" to buildRedirectMap {
-                // Minecraft 1.14 ~ 1.18
-//                for (lib in lwjgl3BaseLibraries) {
-//                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
-//                    redirectToEmpty("$lib:3.2.2:natives")
-//                }
-
                 // Minecraft 1.6~1.12
                 val lwjgl2Natives = buildMap<String, Any> {
                     val artifact =
@@ -294,8 +288,61 @@ rootProject.tasks.create("generateJson") {
                     redirect("org.lwjgl.lwjgl:lwjgl-platform:$v:natives", lwjgl2Natives)
                 }
 
+                // Minecraft 1.13~1.19+
+                val lwjgl3Natives = buildMap<String, Any> {
+                    val artifact =
+                        (mavenLibrary("org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1-linux-loongarch64_ow")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
+
+                    put("name", "org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1")
+                    put(
+                        "downloads", mapOf(
+                            "classifiers" to mapOf(
+                                "linux-loongarch64_ow" to mapOf(
+                                    "path" to "org/glavo/hmcl/lwjgl3-natives/3.3.1-rc1/lwjgl3-natives-3.3.1-rc1-linux-loongarch64_ow.jar",
+                                    "url" to artifact["url"],
+                                    "sha1" to artifact["sha1"],
+                                    "size" to artifact["size"]
+                                )
+                            )
+                        )
+                    )
+
+                    put(
+                        "extract", mapOf(
+                            "exclude" to listOf("META-INF/")
+                        )
+                    )
+                    put(
+                        "natives", mapOf(
+                            "linux" to "linux-loongarch64_ow"
+                        )
+                    )
+                }
+
+                // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
-                    redirectToEmpty("$lib:3.3.1:natives-linux")
+                    redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.1"))
+                    if (lib == "org.lwjgl:lwjgl")
+                        redirect("$lib:3.1.6:natives", lwjgl3Natives)
+                    else
+                        redirectToEmpty("$lib:3.1.6:natives")
+                }
+
+                // Minecraft 1.14 ~ 1.18
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
+                    if (lib == "org.lwjgl:lwjgl")
+                        redirect("$lib:3.2.2:natives", lwjgl3Natives)
+                    else
+                        redirectToEmpty("$lib:3.2.2:natives")
+                }
+
+                // Minecraft 1.19+
+                for (lib in lwjgl3BaseLibraries) {
+                    if (lib == "org.lwjgl:lwjgl")
+                        redirect("$lib:3.3.1:natives-linux", lwjgl3Natives)
+                    else
+                        redirectToEmpty("$lib:3.3.1:natives-linux")
                 }
 
                 redirectAllToEmpty(
