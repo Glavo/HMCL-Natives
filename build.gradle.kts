@@ -241,7 +241,47 @@ rootProject.tasks.create("generateJson") {
                     redirect("$lib:3.3.1:natives-linux", mavenLibrary("$lib:3.3.1:natives-linux-arm32"))
                 }
 
+                // Minecraft 1.6~1.12
+                val lwjgl2Natives = buildMap<String, Any> {
+                    val artifact =
+                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-linux-arm32")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
+
+                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3")
+                    put(
+                        "downloads", mapOf(
+                            "classifiers" to mapOf(
+                                "linux-arm32" to mapOf(
+                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3/lwjgl2-natives-2.9.3-linux-arm32.jar",
+                                    "url" to artifact["url"],
+                                    "sha1" to artifact["sha1"],
+                                    "size" to artifact["size"]
+                                )
+                            )
+                        )
+                    )
+
+                    put(
+                        "extract", mapOf(
+                            "exclude" to listOf("META-INF/")
+                        )
+                    )
+                    put(
+                        "natives", mapOf(
+                            "linux" to "linux-arm32"
+                        )
+                    )
+                }
+
+                for (v in listOf(
+                    "2.9.0",
+                    "2.9.1",
+                    "2.9.4-nightly-20150209"
+                )) {
+                    redirect("org.lwjgl.lwjgl:lwjgl-platform:$v:natives", lwjgl2Natives)
+                }
+
                 redirectAllToEmpty(
+                    "net.java.jinput:jinput-platform:2.0.5:natives",
                     "com.mojang:text2speech:1.10.3:natives",
                     "com.mojang:text2speech:1.11.3:natives",
                     "com.mojang:text2speech:1.12.4:natives",

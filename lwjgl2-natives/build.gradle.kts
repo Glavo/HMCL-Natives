@@ -25,7 +25,7 @@ tasks.getByName<Test>("test") {
 }
 
 val platforms = listOf(
-    "linux-arm64", "linux-loongarch64_ow"
+    "linux-arm32", "linux-arm64", "linux-loongarch64_ow"
 )
 
 val platformJarVersion: Map<String, String> = mutableMapOf<String, String>().apply{
