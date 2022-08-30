@@ -1,7 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 @file:OptIn(kotlin.ExperimentalStdlibApi::class)
 
-import java.security.*
 import java.util.Properties
 
 buildscript {
@@ -397,11 +396,34 @@ rootProject.tasks.create("generateJson") {
                 redirect("software-renderer-loader", mavenLibrary("org.glavo:llvmpipe-loader:1.0"))
             },
             "windows-arm64" to buildRedirectMap {
+                // Minecraft 1.13
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.1"))
+                    redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.3.1:natives-windows-arm64"))
+                }
+
+                // Minecraft 1.14 ~ 1.18
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
+                    redirect("$lib:3.2.2:natives", mavenLibrary("$lib:3.3.1:natives-windows-arm64"))
+                }
+
                 // Minecraft 1.19+
                 for (lib in lwjgl3BaseLibraries) {
                     redirect("$lib:3.3.1:natives-windows", mavenLibrary("$lib:3.3.1:natives-windows-arm64"))
+                    redirectToEmpty("$lib:3.3.1:natives-windows-x86")
                 }
-                redirectToEmpty("com.mojang:text2speech:1.13.9:natives-windows")
+
+                redirectAllToEmpty(
+                    "net.java.jinput:jinput-platform:2.0.5:natives",
+                    "com.mojang:text2speech:1.10.3:natives",
+                    "com.mojang:text2speech:1.11.3:natives",
+                    "com.mojang:text2speech:1.12.4:natives",
+                    "com.mojang:text2speech:1.13.9:natives-windows"
+                )
+            },
+            "osx-arm64" to buildRedirectMap {
+
             }
         )
 
