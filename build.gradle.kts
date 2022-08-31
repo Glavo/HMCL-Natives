@@ -396,6 +396,46 @@ rootProject.tasks.create("generateJson") {
                 redirect("software-renderer-loader", mavenLibrary("org.glavo:llvmpipe-loader:1.0"))
             },
             "windows-arm64" to buildRedirectMap {
+                // Minecraft 1.6~1.12
+                val lwjgl2Natives = buildMap<String, Any> {
+                    val artifact =
+                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1-windows-arm64")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
+
+                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1")
+                    put(
+                        "downloads", mapOf(
+                            "classifiers" to mapOf(
+                                "windows-arm64" to mapOf(
+                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3-rc1/lwjgl2-natives-2.9.3-rc1-windows-arm64.jar",
+                                    "url" to artifact["url"],
+                                    "sha1" to artifact["sha1"],
+                                    "size" to artifact["size"]
+                                )
+                            )
+                        )
+                    )
+
+                    put(
+                        "extract", mapOf(
+                            "exclude" to listOf("META-INF/")
+                        )
+                    )
+                    put(
+                        "natives", mapOf(
+                            "windows" to "windows-arm64"
+                        )
+                    )
+                }
+
+                for (v in listOf(
+                    "2.9.0",
+                    "2.9.1",
+                    "2.9.4-nightly-20150209"
+                )) {
+                    redirect("org.lwjgl.lwjgl:lwjgl-platform:$v:natives", lwjgl2Natives)
+                }
+
+
                 // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
                     redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.1"))
