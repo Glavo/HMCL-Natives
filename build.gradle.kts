@@ -291,14 +291,14 @@ rootProject.tasks.create("generateJson") {
                 // Minecraft 1.6~1.12
                 val lwjgl2Natives = buildMap<String, Any> {
                     val artifact =
-                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1-linux-mips64el")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
+                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-rc2-linux-mips64el")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
 
-                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1")
+                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3-rc2")
                     put(
                         "downloads", mapOf(
                             "classifiers" to mapOf(
                                 "linux-mips64el" to mapOf(
-                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3-rc1/lwjgl2-natives-2.9.3-rc1-linux-mips64el.jar",
+                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3-rc2/lwjgl2-natives-2.9.3-rc2-linux-mips64el.jar",
                                     "url" to artifact["url"],
                                     "sha1" to artifact["sha1"],
                                     "size" to artifact["size"]
@@ -330,14 +330,14 @@ rootProject.tasks.create("generateJson") {
                 // Minecraft 1.13~1.19+
                 val lwjgl3Natives = buildMap<String, Any> {
                     val artifact =
-                        (mavenLibrary("org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1-linux-mips64el")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
+                        (mavenLibrary("org.glavo.hmcl:lwjgl3-natives:3.3.1-rc2-linux-mips64el")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
 
-                    put("name", "org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1")
+                    put("name", "org.glavo.hmcl:lwjgl3-natives:3.3.1-rc2")
                     put(
                         "downloads", mapOf(
                             "classifiers" to mapOf(
                                 "linux-mips64el" to mapOf(
-                                    "path" to "org/glavo/hmcl/lwjgl3-natives/3.3.1-rc1/lwjgl3-natives-3.3.1-rc1-linux-mips64el.jar",
+                                    "path" to "org/glavo/hmcl/lwjgl3-natives/3.3.1-rc2/lwjgl3-natives-3.3.1-rc2-linux-mips64el.jar",
                                     "url" to artifact["url"],
                                     "sha1" to artifact["sha1"],
                                     "size" to artifact["size"]
