@@ -499,6 +499,10 @@ rootProject.tasks.create("generateJson") {
             },
             "windows-x86_64" to buildRedirectMap {
                 redirect("software-renderer-loader", mavenLibrary("org.glavo:llvmpipe-loader:1.0"))
+                redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:0.2.0:x64"))
+            },
+            "windows-x86" to buildRedirectMap {
+                redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:0.2.0:x86"))
             },
             "windows-arm64" to buildRedirectMap {
                 // Minecraft 1.6~1.12
@@ -568,7 +572,75 @@ rootProject.tasks.create("generateJson") {
                 )
             },
             "osx-arm64" to buildRedirectMap {
+                // Minecraft 1.6~1.12
+                val lwjgl2Natives = buildMap<String, Any> {
+                    val artifact =
+                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1-osx-arm64")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
 
+                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1")
+                    put(
+                        "downloads", mapOf(
+                            "classifiers" to mapOf(
+                                "osx-arm64" to mapOf(
+                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3-rc1/lwjgl2-natives-2.9.3-rc1-osx-arm64.jar",
+                                    "url" to artifact["url"],
+                                    "sha1" to artifact["sha1"],
+                                    "size" to artifact["size"]
+                                )
+                            )
+                        )
+                    )
+
+                    put(
+                        "extract", mapOf(
+                            "exclude" to listOf("META-INF/")
+                        )
+                    )
+                    put(
+                        "natives", mapOf(
+                            "osx" to "osx-arm64"
+                        )
+                    )
+                }
+
+                for (v in listOf(
+                    "2.9.1-nightly-20130708-debug3",
+                    "2.9.1",
+                    "2.9.2-nightly-20140822"
+                )) {
+                    redirect("org.lwjgl.lwjgl:lwjgl-platform:$v:natives", lwjgl2Natives)
+                }
+
+                // Minecraft 1.13
+                for (lib in lwjgl3BaseLibraries) {
+                    if (lib == "org.lwjgl:lwjgl-glfw")
+                        redirect("$lib:3.1.6", mavenLibrary("org.glavo.hmcl.mmachina:lwjgl-glfw:3.3.1-mmachina.1"))
+                    else
+                        redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.1"))
+                    redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.3.1:natives-macos-arm64", repo = MavenRepo.MOJANG))
+                }
+
+                // Minecraft 1.14 ~ 1.18
+                for (lib in lwjgl3BaseLibraries) {
+                    if (lib == "org.lwjgl:lwjgl-glfw")
+                        redirect("$lib:3.2.1", mavenLibrary("org.glavo.hmcl.mmachina:lwjgl-glfw:3.3.1-mmachina.1"))
+                    else
+                        redirect("$lib:3.2.1", mavenLibrary("$lib:3.3.1"))
+                    redirect("$lib:3.2.1:natives", mavenLibrary("$lib:3.3.1:natives-macos-arm64", repo = MavenRepo.MOJANG))
+                }
+
+                redirect("ca.weblite:java-objc-bridge:1.0.0", mavenLibrary("org.glavo.hmcl.mmachina:java-objc-bridge:1.1.0-mmachina.1"))
+                redirectToEmpty("ca.weblite:java-objc-bridge:1.0.0:natives")
+
+
+                redirect("com.mojang:text2speech:1.10.3", mavenLibrary("com.mojang:text2speech:1.11.3", repo = MavenRepo.MOJANG))
+
+                redirectAllToEmpty(
+                    "net.java.jinput:jinput-platform:2.0.5:natives",
+                    "com.mojang:text2speech:1.10.3:natives",
+                    "com.mojang:text2speech:1.11.3:natives",
+                    "com.mojang:text2speech:1.12.4:natives"
+                )
             }
         )
 
