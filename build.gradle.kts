@@ -9,14 +9,13 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.google.code.gson:gson:2.8.1")
+        classpath("com.google.code.gson:gson:2.10.1")
     }
 }
 
 plugins {
     id("java")
 }
-
 
 var secretPropsFile = project.rootProject.file("gradle/maven-central-publish.properties")
 if (!secretPropsFile.exists()) {
@@ -459,6 +458,72 @@ rootProject.tasks.create("generateJson") {
                     put(
                         "natives", mapOf(
                             "linux" to "linux-loongarch64_ow"
+                        )
+                    )
+                }
+
+                // Minecraft 1.13
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.1"))
+                    if (lib == "org.lwjgl:lwjgl")
+                        redirect("$lib:3.1.6:natives", lwjgl3Natives)
+                    else
+                        redirectToEmpty("$lib:3.1.6:natives")
+                }
+
+                // Minecraft 1.14 ~ 1.18
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
+                    if (lib == "org.lwjgl:lwjgl")
+                        redirect("$lib:3.2.2:natives", lwjgl3Natives)
+                    else
+                        redirectToEmpty("$lib:3.2.2:natives")
+                }
+
+                // Minecraft 1.19+
+                for (lib in lwjgl3BaseLibraries) {
+                    if (lib == "org.lwjgl:lwjgl")
+                        redirect("$lib:3.3.1:natives-linux", lwjgl3Natives)
+                    else
+                        redirectToEmpty("$lib:3.3.1:natives-linux")
+                }
+
+                redirectAllToEmpty(
+                    "net.java.jinput:jinput-platform:2.0.5:natives",
+                    "com.mojang:text2speech:1.10.3:natives",
+                    "com.mojang:text2speech:1.11.3:natives",
+                    "com.mojang:text2speech:1.12.4:natives",
+                    "com.mojang:text2speech:1.13.9:natives-linux"
+                )
+            },
+            "linux-riscv64" to buildRedirectMap {
+                // Minecraft 1.13~1.19+
+                val lwjgl3Natives = buildMap<String, Any> {
+                    val artifact =
+                        (mavenLibrary("org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1-linux-riscv64")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
+
+                    put("name", "org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1")
+                    put(
+                        "downloads", mapOf(
+                            "classifiers" to mapOf(
+                                "linux-riscv64" to mapOf(
+                                    "path" to "org/glavo/hmcl/lwjgl3-natives/3.3.1-rc1/lwjgl3-natives-3.3.1-rc1-linux-riscv64.jar",
+                                    "url" to artifact["url"],
+                                    "sha1" to artifact["sha1"],
+                                    "size" to artifact["size"]
+                                )
+                            )
+                        )
+                    )
+
+                    put(
+                        "extract", mapOf(
+                            "exclude" to listOf("META-INF/")
+                        )
+                    )
+                    put(
+                        "natives", mapOf(
+                            "linux" to "linux-riscv64"
                         )
                     )
                 }
