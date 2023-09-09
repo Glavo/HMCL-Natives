@@ -141,6 +141,41 @@ class MapBuilder {
 inline fun buildRedirectMap(f: MapBuilder.() -> Unit): Map<String, Map<String, Any>?> =
     MapBuilder().apply { f() }.build()
 
+fun lwjglNatives(os: String, arch: String, version: String) = buildMap<String, Any> {
+    val artifactId = when {
+        version.startsWith('2') -> "lwjgl2-natives"
+        version.startsWith('3') -> "lwjgl3-natives"
+        else -> throw AssertionError()
+    }
+
+    val artifact =
+        (mavenLibrary("org.glavo.hmcl:$artifactId:$version-$os-$arch")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
+
+    put("name", "org.glavo.hmcl:$artifactId:$version")
+    put(
+        "downloads", mapOf(
+            "classifiers" to mapOf(
+                "$os-$arch" to mapOf(
+                    "path" to "org/glavo/hmcl/$artifactId/$version/$artifactId-$version-$os-$arch.jar",
+                    "url" to artifact["url"],
+                    "sha1" to artifact["sha1"],
+                    "size" to artifact["size"]
+                )
+            )
+        )
+    )
+
+    put(
+        "extract", mapOf(
+            "exclude" to listOf("META-INF/")
+        )
+    )
+    put(
+        "natives", mapOf(
+            os to "$os-$arch"
+        )
+    )
+}
 
 val lwjgl3BaseLibraries = listOf(
     "org.lwjgl:lwjgl",
@@ -175,35 +210,7 @@ rootProject.tasks.create("generateJson") {
                 }
 
                 // Minecraft 1.6~1.12
-                val lwjgl2Natives = buildMap<String, Any> {
-                    val artifact =
-                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-linux-arm64")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
-
-                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3")
-                    put(
-                        "downloads", mapOf(
-                            "classifiers" to mapOf(
-                                "linux-arm64" to mapOf(
-                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3/lwjgl2-natives-2.9.3-linux-arm64.jar",
-                                    "url" to artifact["url"],
-                                    "sha1" to artifact["sha1"],
-                                    "size" to artifact["size"]
-                                )
-                            )
-                        )
-                    )
-
-                    put(
-                        "extract", mapOf(
-                            "exclude" to listOf("META-INF/")
-                        )
-                    )
-                    put(
-                        "natives", mapOf(
-                            "linux" to "linux-arm64"
-                        )
-                    )
-                }
+                val lwjgl2Natives = lwjglNatives("linux", "arm64", "2.9.3")
 
                 for (v in listOf(
                     "2.9.0",
@@ -288,35 +295,7 @@ rootProject.tasks.create("generateJson") {
             },
             "linux-mips64el" to buildRedirectMap {
                 // Minecraft 1.6~1.12
-                val lwjgl2Natives = buildMap<String, Any> {
-                    val artifact =
-                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-rc2-linux-mips64el")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
-
-                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3-rc2")
-                    put(
-                        "downloads", mapOf(
-                            "classifiers" to mapOf(
-                                "linux-mips64el" to mapOf(
-                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3-rc2/lwjgl2-natives-2.9.3-rc2-linux-mips64el.jar",
-                                    "url" to artifact["url"],
-                                    "sha1" to artifact["sha1"],
-                                    "size" to artifact["size"]
-                                )
-                            )
-                        )
-                    )
-
-                    put(
-                        "extract", mapOf(
-                            "exclude" to listOf("META-INF/")
-                        )
-                    )
-                    put(
-                        "natives", mapOf(
-                            "linux" to "linux-mips64el"
-                        )
-                    )
-                }
+                val lwjgl2Natives = lwjglNatives("linux", "mips64el", "2.9.3-rc2")
 
                 for (v in listOf(
                     "2.9.0",
@@ -327,35 +306,7 @@ rootProject.tasks.create("generateJson") {
                 }
 
                 // Minecraft 1.13~1.19+
-                val lwjgl3Natives = buildMap<String, Any> {
-                    val artifact =
-                        (mavenLibrary("org.glavo.hmcl:lwjgl3-natives:3.3.1-rc2-linux-mips64el")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
-
-                    put("name", "org.glavo.hmcl:lwjgl3-natives:3.3.1-rc2")
-                    put(
-                        "downloads", mapOf(
-                            "classifiers" to mapOf(
-                                "linux-mips64el" to mapOf(
-                                    "path" to "org/glavo/hmcl/lwjgl3-natives/3.3.1-rc2/lwjgl3-natives-3.3.1-rc2-linux-mips64el.jar",
-                                    "url" to artifact["url"],
-                                    "sha1" to artifact["sha1"],
-                                    "size" to artifact["size"]
-                                )
-                            )
-                        )
-                    )
-
-                    put(
-                        "extract", mapOf(
-                            "exclude" to listOf("META-INF/")
-                        )
-                    )
-                    put(
-                        "natives", mapOf(
-                            "linux" to "linux-mips64el"
-                        )
-                    )
-                }
+                val lwjgl3Natives = lwjglNatives("linux", "mips64el", "3.3.1-rc2")
 
                 // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
@@ -392,36 +343,19 @@ rootProject.tasks.create("generateJson") {
                 )
             },
             "linux-loongarch64" to buildRedirectMap {
-                // Minecraft 1.13~1.19+
-                val lwjgl3Natives = buildMap<String, Any> {
-                    val artifact =
-                        (mavenLibrary("org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1-linux-loongarch64")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
+                // Minecraft 1.6~1.12
+                val lwjgl2Natives = lwjglNatives("linux", "loongarch64", "2.9.3-rc2")
 
-                    put("name", "org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1")
-                    put(
-                        "downloads", mapOf(
-                            "classifiers" to mapOf(
-                                "linux-loongarch64" to mapOf(
-                                    "path" to "org/glavo/hmcl/lwjgl3-natives/3.3.1-rc1/lwjgl3-natives-3.3.1-rc1-linux-loongarch64.jar",
-                                    "url" to artifact["url"],
-                                    "sha1" to artifact["sha1"],
-                                    "size" to artifact["size"]
-                                )
-                            )
-                        )
-                    )
-
-                    put(
-                        "extract", mapOf(
-                            "exclude" to listOf("META-INF/")
-                        )
-                    )
-                    put(
-                        "natives", mapOf(
-                            "linux" to "linux-loongarch64"
-                        )
-                    )
+                for (v in listOf(
+                    "2.9.0",
+                    "2.9.1",
+                    "2.9.4-nightly-20150209"
+                )) {
+                    redirect("org.lwjgl.lwjgl:lwjgl-platform:$v:natives", lwjgl2Natives)
                 }
+
+                // Minecraft 1.13~1.19+
+                val lwjgl3Natives = lwjglNatives("linux", "loongarch64", "3.3.1-rc1")
 
                 // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
@@ -470,35 +404,7 @@ rootProject.tasks.create("generateJson") {
             },
             "linux-loongarch64_ow" to buildRedirectMap {
                 // Minecraft 1.6~1.12
-                val lwjgl2Natives = buildMap<String, Any> {
-                    val artifact =
-                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1-linux-loongarch64")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
-
-                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1")
-                    put(
-                        "downloads", mapOf(
-                            "classifiers" to mapOf(
-                                "linux-loongarch64" to mapOf(
-                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3-rc1/lwjgl2-natives-2.9.3-rc1-linux-loongarch64.jar",
-                                    "url" to artifact["url"],
-                                    "sha1" to artifact["sha1"],
-                                    "size" to artifact["size"]
-                                )
-                            )
-                        )
-                    )
-
-                    put(
-                        "extract", mapOf(
-                            "exclude" to listOf("META-INF/")
-                        )
-                    )
-                    put(
-                        "natives", mapOf(
-                            "linux" to "linux-loongarch64"
-                        )
-                    )
-                }
+                val lwjgl2Natives = lwjglNatives("linux", "loongarch64", "2.9.3-rc1")
 
                 for (v in listOf(
                     "2.9.0",
@@ -509,35 +415,7 @@ rootProject.tasks.create("generateJson") {
                 }
 
                 // Minecraft 1.13~1.19+
-                val lwjgl3Natives = buildMap<String, Any> {
-                    val artifact =
-                        (mavenLibrary("org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1-linux-loongarch64_ow")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
-
-                    put("name", "org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1")
-                    put(
-                        "downloads", mapOf(
-                            "classifiers" to mapOf(
-                                "linux-loongarch64_ow" to mapOf(
-                                    "path" to "org/glavo/hmcl/lwjgl3-natives/3.3.1-rc1/lwjgl3-natives-3.3.1-rc1-linux-loongarch64_ow.jar",
-                                    "url" to artifact["url"],
-                                    "sha1" to artifact["sha1"],
-                                    "size" to artifact["size"]
-                                )
-                            )
-                        )
-                    )
-
-                    put(
-                        "extract", mapOf(
-                            "exclude" to listOf("META-INF/")
-                        )
-                    )
-                    put(
-                        "natives", mapOf(
-                            "linux" to "linux-loongarch64_ow"
-                        )
-                    )
-                }
+                val lwjgl3Natives = lwjglNatives("linux", "loongarch64_ow", "3.3.1-rc1")
 
                 // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
@@ -565,6 +443,16 @@ rootProject.tasks.create("generateJson") {
                         redirectToEmpty("$lib:3.3.1:natives-linux")
                 }
 
+                // JNA
+                val jna = mavenLibrary("org.glavo.hmcl:jna:5.13.0-rc1-linux-loongarch64_ow");
+                val jnaPlatform = mavenLibrary("net.java.dev.jna:jna-platform:5.13.0")
+
+                val jnaVersions = listOf("5.8.0", "5.10.0", "5.12.1")
+                for (jnaVersion in jnaVersions) {
+                    redirect("net.java.dev.jna:jna:$jnaVersion", jna)
+                    redirect("net.java.dev.jna:jna-platform:$jnaVersion", jnaPlatform)
+                }
+
                 redirectAllToEmpty(
                     "net.java.jinput:jinput-platform:2.0.5:natives",
                     "com.mojang:text2speech:1.10.3:natives",
@@ -575,35 +463,7 @@ rootProject.tasks.create("generateJson") {
             },
             "linux-riscv64" to buildRedirectMap {
                 // Minecraft 1.13~1.19+
-                val lwjgl3Natives = buildMap<String, Any> {
-                    val artifact =
-                        (mavenLibrary("org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1-linux-riscv64")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
-
-                    put("name", "org.glavo.hmcl:lwjgl3-natives:3.3.1-rc1")
-                    put(
-                        "downloads", mapOf(
-                            "classifiers" to mapOf(
-                                "linux-riscv64" to mapOf(
-                                    "path" to "org/glavo/hmcl/lwjgl3-natives/3.3.1-rc1/lwjgl3-natives-3.3.1-rc1-linux-riscv64.jar",
-                                    "url" to artifact["url"],
-                                    "sha1" to artifact["sha1"],
-                                    "size" to artifact["size"]
-                                )
-                            )
-                        )
-                    )
-
-                    put(
-                        "extract", mapOf(
-                            "exclude" to listOf("META-INF/")
-                        )
-                    )
-                    put(
-                        "natives", mapOf(
-                            "linux" to "linux-riscv64"
-                        )
-                    )
-                }
+                val lwjgl3Natives = lwjglNatives("linux", "riscv64", "3.3.1-rc1")
 
                 // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
@@ -648,35 +508,7 @@ rootProject.tasks.create("generateJson") {
             },
             "windows-arm64" to buildRedirectMap {
                 // Minecraft 1.6~1.12
-                val lwjgl2Natives = buildMap<String, Any> {
-                    val artifact =
-                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1-windows-arm64")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
-
-                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1")
-                    put(
-                        "downloads", mapOf(
-                            "classifiers" to mapOf(
-                                "windows-arm64" to mapOf(
-                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3-rc1/lwjgl2-natives-2.9.3-rc1-windows-arm64.jar",
-                                    "url" to artifact["url"],
-                                    "sha1" to artifact["sha1"],
-                                    "size" to artifact["size"]
-                                )
-                            )
-                        )
-                    )
-
-                    put(
-                        "extract", mapOf(
-                            "exclude" to listOf("META-INF/")
-                        )
-                    )
-                    put(
-                        "natives", mapOf(
-                            "windows" to "windows-arm64"
-                        )
-                    )
-                }
+                val lwjgl2Natives = lwjglNatives("windows", "arm64", "2.9.3-rc1")
 
                 for (v in listOf(
                     "2.9.0",
@@ -685,7 +517,6 @@ rootProject.tasks.create("generateJson") {
                 )) {
                     redirect("org.lwjgl.lwjgl:lwjgl-platform:$v:natives", lwjgl2Natives)
                 }
-
 
                 // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
@@ -715,35 +546,7 @@ rootProject.tasks.create("generateJson") {
             },
             "osx-arm64" to buildRedirectMap {
                 // Minecraft 1.6~1.12
-                val lwjgl2Natives = buildMap<String, Any> {
-                    val artifact =
-                        (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1-osx-arm64")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
-
-                    put("name", "org.glavo.hmcl:lwjgl2-natives:2.9.3-rc1")
-                    put(
-                        "downloads", mapOf(
-                            "classifiers" to mapOf(
-                                "osx-arm64" to mapOf(
-                                    "path" to "org/glavo/hmcl/lwjgl2-natives/2.9.3-rc1/lwjgl2-natives-2.9.3-rc1-osx-arm64.jar",
-                                    "url" to artifact["url"],
-                                    "sha1" to artifact["sha1"],
-                                    "size" to artifact["size"]
-                                )
-                            )
-                        )
-                    )
-
-                    put(
-                        "extract", mapOf(
-                            "exclude" to listOf("META-INF/")
-                        )
-                    )
-                    put(
-                        "natives", mapOf(
-                            "osx" to "osx-arm64"
-                        )
-                    )
-                }
+                val lwjgl2Natives = lwjglNatives("osx", "arm64", "2.9.3-rc1")
 
                 for (v in listOf(
                     "2.9.1-nightly-20130708-debug3",
