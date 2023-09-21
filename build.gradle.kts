@@ -520,21 +520,22 @@ rootProject.tasks.create("generateJson") {
 
                 // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.1"))
-                    redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.3.1:natives-windows-arm64"))
+                    redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.2", repo = MavenRepo.MOJANG))
+                    redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.3.2:natives-windows-arm64", repo = MavenRepo.MOJANG))
                 }
 
                 // Minecraft 1.14 ~ 1.18
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
-                    redirect("$lib:3.2.2:natives", mavenLibrary("$lib:3.3.1:natives-windows-arm64"))
+                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.2", repo = MavenRepo.MOJANG))
+                    redirect("$lib:3.2.2:natives", mavenLibrary("$lib:3.3.2:natives-windows-arm64", repo = MavenRepo.MOJANG))
                 }
 
-                // Minecraft 1.19+
-                for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.3.1:natives-windows", mavenLibrary("$lib:3.3.1:natives-windows-arm64"))
-                    redirectToEmpty("$lib:3.3.1:natives-windows-x86")
-                }
+//                // Minecraft 1.19~1.20.1
+//                for (lib in lwjgl3BaseLibraries) {
+//                    redirect("$lib:3.3.1", mavenLibrary("$lib:3.3.2"))
+//                    redirect("$lib:3.3.1:natives-windows", mavenLibrary("$lib:3.3.2:natives-windows-arm64"))
+//                    redirectToEmpty("$lib:3.3.1:natives-windows-x86")
+//                }
 
                 redirectAllToEmpty(
                     "net.java.jinput:jinput-platform:2.0.5:natives",
