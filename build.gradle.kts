@@ -194,19 +194,25 @@ rootProject.tasks.create("generateJson") {
             "linux-arm64" to buildRedirectMap {
                 // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.1.6", mavenLibrary("$lib:3.2.3"))
-                    redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.2.3:natives-linux-arm64"))
+                    redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.2", repo = MavenRepo.MOJANG))
+                    redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.3.2:natives-linux-arm64"))
                 }
 
                 // Minecraft 1.14 ~ 1.18
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.2.3"))
-                    redirect("$lib:3.2.2:natives", mavenLibrary("$lib:3.2.3:natives-linux-arm64"))
+                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.2", repo = MavenRepo.MOJANG))
+                    redirect("$lib:3.2.2:natives", mavenLibrary("$lib:3.3.2:natives-linux-arm64"))
                 }
 
-                // Minecraft 1.19+
+                // Minecraft 1.19~1.20.1
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.3.1:natives-linux", mavenLibrary("$lib:3.3.1:natives-linux-arm64"))
+                    redirect("$lib:3.3.1", mavenLibrary("$lib:3.3.2", repo = MavenRepo.MOJANG))
+                    redirect("$lib:3.3.1:natives-linux", mavenLibrary("$lib:3.3.2:natives-linux-arm64"))
+                }
+
+                // Minecraft 1.20.2+
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.3.2:natives-linux", mavenLibrary("$lib:3.3.2:natives-linux-arm64"))
                 }
 
                 // Minecraft 1.6~1.12
