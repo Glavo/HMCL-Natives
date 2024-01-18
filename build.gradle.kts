@@ -69,7 +69,7 @@ tasks.getByName<Test>("test") {
 initProject(rootProject)
 
 val pattern = Regex("(?<groupId>[^:]+):(?<artifactId>[^:]+):(?<version>[^:]+)(:(?<classifier>[^:]+))?").toPattern()
-fun mavenLibrary(name: String, repo: MavenRepo = MavenRepo.MAVEN_CENTRAL): Map<String, Any> {
+fun mavenLibrary(name: String, snapshot: String? = null, repo: MavenRepo = MavenRepo.MAVEN_CENTRAL): Map<String, Any> {
     val matcher = pattern.matcher(name)
     if (!matcher.matches())
         throw AssertionError("name=$name")
@@ -89,7 +89,11 @@ fun mavenLibrary(name: String, repo: MavenRepo = MavenRepo.MAVEN_CENTRAL): Map<S
 
         append(artifactId)
         append('-')
-        append(version)
+
+        if (snapshot == null)
+            append(version)
+        else
+            append(snapshot)
         if (classifier != null) {
             append('-')
             append(classifier)
@@ -592,6 +596,49 @@ rootProject.tasks.create("generateJson") {
                     "com.mojang:text2speech:1.10.3:natives",
                     "com.mojang:text2speech:1.11.3:natives",
                     "com.mojang:text2speech:1.12.4:natives"
+                )
+            },
+            "freebsd-x86_64" to buildRedirectMap {
+
+                fun freebsdMavenLibrary(lib: String, natives: Boolean): Map<String, Any> {
+                    val snapshot = if (lib == "org.lwjgl:lwjgl-stb" || lib == "org.lwjgl:lwjgl-tinyfd")
+                        "3.3.4-20231218.151521-3"
+                    else
+                        "3.3.4-20231218.151521-4"
+                    return mavenLibrary("$lib:3.3.4-SNAPSHOT" + (if (natives) ":natives-freebsd" else ""),
+                        snapshot = snapshot, repo = MavenRepo.SONATYPE_SNAPSHOTS)
+                }
+
+                // Minecraft 1.13
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.1.6", freebsdMavenLibrary(lib, false))
+                    redirect("$lib:3.1.6:natives", freebsdMavenLibrary(lib, true))
+                }
+
+                // Minecraft 1.14 ~ 1.18
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.2.2", freebsdMavenLibrary(lib, false))
+                    redirect("$lib:3.2.2:natives", freebsdMavenLibrary(lib, true))
+                }
+
+                // Minecraft 1.19~1.20.1
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.3.1", freebsdMavenLibrary(lib, false))
+                    redirect("$lib:3.3.1:natives-linux", freebsdMavenLibrary(lib, true))
+                }
+
+                // Minecraft 1.20.2+
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.3.2", freebsdMavenLibrary(lib, false))
+                    redirect("$lib:3.3.2:natives-linux", freebsdMavenLibrary(lib, true))
+                }
+
+                redirectAllToEmpty(
+                    "net.java.jinput:jinput-platform:2.0.5:natives",
+                    "com.mojang:text2speech:1.10.3:natives",
+                    "com.mojang:text2speech:1.11.3:natives",
+                    "com.mojang:text2speech:1.12.4:natives",
+                    "com.mojang:text2speech:1.13.9:natives-linux"
                 )
             }
         )

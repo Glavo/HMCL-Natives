@@ -1,12 +1,10 @@
-import org.gradle.api.Project
 import java.io.File
-import java.io.*
 import java.net.URL
-import java.security.*
 
 enum class MavenRepo(val url: String, val mirrorURL: String = url) {
     MAVEN_CENTRAL("https://repo1.maven.org/maven2", mirrorURL = "https://maven.aliyun.com/repository/central"),
-    MOJANG("https://libraries.minecraft.net");
+    MOJANG("https://libraries.minecraft.net"),
+    SONATYPE_SNAPSHOTS("https://oss.sonatype.org/content/repositories/snapshots");
 
     private fun downloadSHA1(path: String): String {
         val baseDir: File = project.buildDir.resolve("cache")
