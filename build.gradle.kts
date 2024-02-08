@@ -493,13 +493,30 @@ rootProject.tasks.create("generateJson") {
                         redirectToEmpty("$lib:3.2.2:natives")
                 }
 
-                // Minecraft 1.19+
+                // Minecraft 1.19~1.20.1
                 for (lib in lwjgl3BaseLibraries) {
                     if (lib == "org.lwjgl:lwjgl")
                         redirect("$lib:3.3.1:natives-linux", lwjgl3Natives)
                     else
                         redirectToEmpty("$lib:3.3.1:natives-linux")
                 }
+
+
+                fun officialMavenLibrary(lib: String, natives: Boolean): Map<String, Any> {
+                    val snapshot = if (lib == "org.lwjgl:lwjgl-stb" || lib == "org.lwjgl:lwjgl-tinyfd")
+                        "3.3.4-20231218.151521-3"
+                    else
+                        "3.3.4-20231218.151521-4"
+                    return mavenLibrary("$lib:3.3.4-SNAPSHOT" + (if (natives) ":natives-freebsd" else ""),
+                        snapshot = snapshot, repo = MavenRepo.SONATYPE_SNAPSHOTS)
+                }
+
+                // Minecraft 1.20.2+
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.3.2", officialMavenLibrary(lib, false))
+                    redirect("$lib:3.3.2:natives-linux", officialMavenLibrary(lib, true))
+                }
+
 
                 redirectAllToEmpty(
                     "net.java.jinput:jinput-platform:2.0.5:natives",
