@@ -1,4 +1,5 @@
 import java.io.File
+import java.net.URI
 import java.net.URL
 
 enum class MavenRepo(val url: String, val mirrorURL: String = url) {
@@ -7,7 +8,7 @@ enum class MavenRepo(val url: String, val mirrorURL: String = url) {
     SONATYPE_SNAPSHOTS("https://oss.sonatype.org/content/repositories/snapshots");
 
     private fun downloadSHA1(path: String): String {
-        val baseDir: File = project.buildDir.resolve("cache")
+        val baseDir: File = project.layout.buildDirectory.asFile.get().resolve("cache")
         val targetFile = baseDir.resolve(path)
 
         if (targetFile.exists()) {
@@ -16,7 +17,7 @@ enum class MavenRepo(val url: String, val mirrorURL: String = url) {
                 return res
         }
 
-        val bytes = URL("$mirrorURL/$path").readBytes()
+        val bytes = URI("$mirrorURL/$path").toURL().readBytes()
 
         val res = String(bytes).trim()
         if (res.length != 40) {
@@ -29,7 +30,7 @@ enum class MavenRepo(val url: String, val mirrorURL: String = url) {
     }
 
     fun downloadFile(path: String): Pair<Long, String> {
-        val baseDir = project.buildDir.resolve("cache")
+        val baseDir = project.layout.buildDirectory.asFile.get().resolve("cache")
         val targetFile = baseDir.resolve(path)
 
         val expectedSHA1 = downloadSHA1("$path.sha1")
@@ -44,7 +45,7 @@ enum class MavenRepo(val url: String, val mirrorURL: String = url) {
 
         println("Downloading $mirrorURL/$path")
         targetFile.outputStream().use { output ->
-            URL("$mirrorURL/$path").openStream().use { input ->
+            URI("$mirrorURL/$path").toURL().openStream().use { input ->
                 var n: Int
                 while (input.read(buffer).also { n = it } > 0) {
                     output.write(buffer, 0, n)
