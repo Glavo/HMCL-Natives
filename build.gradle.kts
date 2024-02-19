@@ -191,6 +191,11 @@ val lwjgl3BaseLibraries = listOf(
     "org.lwjgl:lwjgl-tinyfd"
 )
 
+fun lwjgl3_3_4SnapshotVersion(lib: String) = if (lib == "org.lwjgl:lwjgl-stb" || lib == "org.lwjgl:lwjgl-tinyfd")
+    "3.3.4-20231218.151521-3"
+else
+    "3.3.4-20231218.151521-4"
+
 val jsonFile = rootProject.layout.buildDirectory.asFile.get().resolve("natives.json")
 rootProject.tasks.create("generateJson") {
     doLast {
@@ -503,18 +508,20 @@ rootProject.tasks.create("generateJson") {
 
 
                 fun officialMavenLibrary(lib: String, natives: Boolean): Map<String, Any> {
-                    val snapshot = if (lib == "org.lwjgl:lwjgl-stb" || lib == "org.lwjgl:lwjgl-tinyfd")
-                        "3.3.4-20231218.151521-3"
-                    else
-                        "3.3.4-20231218.151521-4"
-                    return mavenLibrary("$lib:3.3.4-SNAPSHOT" + (if (natives) ":natives-freebsd" else ""),
-                        snapshot = snapshot, repo = MavenRepo.SONATYPE_SNAPSHOTS)
+                    return mavenLibrary("$lib:3.3.4-SNAPSHOT" + (if (natives) ":natives-linux-riscv64" else ""),
+                        snapshot = lwjgl3_3_4SnapshotVersion(lib), repo = MavenRepo.SONATYPE_SNAPSHOTS)
                 }
 
                 // Minecraft 1.20.2+
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.3.2", officialMavenLibrary(lib, false))
-                    redirect("$lib:3.3.2:natives-linux", officialMavenLibrary(lib, true))
+                    val snapshot = lwjgl3_3_4SnapshotVersion(lib)
+
+                    redirect("$lib:3.3.2", mavenLibrary("$lib:3.3.4-SNAPSHOT",
+                        snapshot = snapshot, repo = MavenRepo.SONATYPE_SNAPSHOTS))
+
+                    redirect("$lib:3.3.2:natives-linux", mavenLibrary(
+                        "$lib:3.3.4-SNAPSHOT:natives-linux-riscv64",
+                        snapshot = snapshot, repo = MavenRepo.SONATYPE_SNAPSHOTS))
                 }
 
 
@@ -618,12 +625,8 @@ rootProject.tasks.create("generateJson") {
             "freebsd-x86_64" to buildRedirectMap {
 
                 fun freebsdMavenLibrary(lib: String, natives: Boolean): Map<String, Any> {
-                    val snapshot = if (lib == "org.lwjgl:lwjgl-stb" || lib == "org.lwjgl:lwjgl-tinyfd")
-                        "3.3.4-20231218.151521-3"
-                    else
-                        "3.3.4-20231218.151521-4"
                     return mavenLibrary("$lib:3.3.4-SNAPSHOT" + (if (natives) ":natives-freebsd" else ""),
-                        snapshot = snapshot, repo = MavenRepo.SONATYPE_SNAPSHOTS)
+                        snapshot = lwjgl3_3_4SnapshotVersion(lib), repo = MavenRepo.SONATYPE_SNAPSHOTS)
                 }
 
                 // Minecraft 1.13
