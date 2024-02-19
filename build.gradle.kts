@@ -181,6 +181,13 @@ fun lwjglNatives(os: String, arch: String, version: String) = buildMap<String, A
     )
 }
 
+val allLinuxText2speech = arrayOf(
+    "com.mojang:text2speech:1.10.3:natives",
+    "com.mojang:text2speech:1.11.3:natives",
+    "com.mojang:text2speech:1.12.4:natives",
+    "com.mojang:text2speech:1.13.9:natives-linux"
+)
+
 val lwjgl3BaseLibraries = listOf(
     "org.lwjgl:lwjgl",
     "org.lwjgl:lwjgl-jemalloc",
@@ -235,13 +242,8 @@ rootProject.tasks.create("generateJson") {
                     redirect("org.lwjgl.lwjgl:lwjgl-platform:$v:natives", lwjgl2Natives)
                 }
 
-                redirectAllToEmpty(
-                    "net.java.jinput:jinput-platform:2.0.5:natives",
-                    "com.mojang:text2speech:1.10.3:natives",
-                    "com.mojang:text2speech:1.11.3:natives",
-                    "com.mojang:text2speech:1.12.4:natives",
-                    "com.mojang:text2speech:1.13.9:natives-linux"
-                )
+                redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
+                redirectAllToEmpty(*allLinuxText2speech)
             },
             "linux-arm32" to buildRedirectMap {
                 // Minecraft 1.13
@@ -300,13 +302,8 @@ rootProject.tasks.create("generateJson") {
                     redirect("org.lwjgl.lwjgl:lwjgl-platform:$v:natives", lwjgl2Natives)
                 }
 
-                redirectAllToEmpty(
-                    "net.java.jinput:jinput-platform:2.0.5:natives",
-                    "com.mojang:text2speech:1.10.3:natives",
-                    "com.mojang:text2speech:1.11.3:natives",
-                    "com.mojang:text2speech:1.12.4:natives",
-                    "com.mojang:text2speech:1.13.9:natives-linux"
-                )
+                redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
+                redirectAllToEmpty(*allLinuxText2speech)
             },
             "linux-mips64el" to buildRedirectMap {
                 // Minecraft 1.6~1.12
@@ -409,13 +406,8 @@ rootProject.tasks.create("generateJson") {
                     redirect("net.java.dev.jna:jna-platform:$jnaVersion", jnaPlatform)
                 }
 
-                redirectAllToEmpty(
-                    "net.java.jinput:jinput-platform:2.0.5:natives",
-                    "com.mojang:text2speech:1.10.3:natives",
-                    "com.mojang:text2speech:1.11.3:natives",
-                    "com.mojang:text2speech:1.12.4:natives",
-                    "com.mojang:text2speech:1.13.9:natives-linux"
-                )
+                redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
+                redirectAllToEmpty(*allLinuxText2speech)
             },
             "linux-loongarch64_ow" to buildRedirectMap {
                 // Minecraft 1.6~1.12
@@ -468,13 +460,8 @@ rootProject.tasks.create("generateJson") {
                     redirect("net.java.dev.jna:jna-platform:$jnaVersion", jnaPlatform)
                 }
 
-                redirectAllToEmpty(
-                    "net.java.jinput:jinput-platform:2.0.5:natives",
-                    "com.mojang:text2speech:1.10.3:natives",
-                    "com.mojang:text2speech:1.11.3:natives",
-                    "com.mojang:text2speech:1.12.4:natives",
-                    "com.mojang:text2speech:1.13.9:natives-linux"
-                )
+                redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
+                redirectAllToEmpty(*allLinuxText2speech)
             },
             "linux-riscv64" to buildRedirectMap {
                 // Minecraft 1.13~1.19+
@@ -525,13 +512,8 @@ rootProject.tasks.create("generateJson") {
                 }
 
 
-                redirectAllToEmpty(
-                    "net.java.jinput:jinput-platform:2.0.5:natives",
-                    "com.mojang:text2speech:1.10.3:natives",
-                    "com.mojang:text2speech:1.11.3:natives",
-                    "com.mojang:text2speech:1.12.4:natives",
-                    "com.mojang:text2speech:1.13.9:natives-linux"
-                )
+                redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
+                redirectAllToEmpty(*allLinuxText2speech)
             },
             "windows-x86_64" to buildRedirectMap {
                 redirect("software-renderer-loader", mavenLibrary("org.glavo:llvmpipe-loader:1.0"))
@@ -653,13 +635,8 @@ rootProject.tasks.create("generateJson") {
                     redirect("$lib:3.3.2:natives-linux", freebsdMavenLibrary(lib, true))
                 }
 
-                redirectAllToEmpty(
-                    "net.java.jinput:jinput-platform:2.0.5:natives",
-                    "com.mojang:text2speech:1.10.3:natives",
-                    "com.mojang:text2speech:1.11.3:natives",
-                    "com.mojang:text2speech:1.12.4:natives",
-                    "com.mojang:text2speech:1.13.9:natives-linux"
-                )
+                redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
+                redirectAllToEmpty(*allLinuxText2speech)
             }
         )
 
