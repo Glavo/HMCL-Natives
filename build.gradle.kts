@@ -198,6 +198,8 @@ val lwjgl3BaseLibraries = listOf(
     "org.lwjgl:lwjgl-tinyfd"
 )
 
+val lwjgl3_3_3BaseLibraries = lwjgl3BaseLibraries + listOf("org.lwjgl:lwjgl-freetype")
+
 fun lwjgl3_3_4SnapshotVersion(lib: String) = if (lib == "org.lwjgl:lwjgl-stb" || lib == "org.lwjgl:lwjgl-tinyfd")
     "3.3.4-20231218.151521-3"
 else
@@ -229,6 +231,11 @@ rootProject.tasks.create("generateJson") {
                 // Minecraft 1.20.2+
                 for (lib in lwjgl3BaseLibraries) {
                     redirect("$lib:3.3.2:natives-linux", mavenLibrary("$lib:3.3.2:natives-linux-arm64"))
+                }
+
+                // Minecraft 1.20.5+
+                for (lib in lwjgl3_3_3BaseLibraries) {
+                    redirect("$lib:3.3.3:natives-linux", mavenLibrary("$lib:3.3.3:natives-linux-arm64"))
                 }
 
                 // Minecraft 1.6~1.12
