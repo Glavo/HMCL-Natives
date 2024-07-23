@@ -198,7 +198,7 @@ val lwjgl3BaseLibraries = listOf(
     "org.lwjgl:lwjgl-tinyfd"
 )
 
-val lwjgl3_3_3BaseLibraries = lwjgl3BaseLibraries + listOf("org.lwjgl:lwjgl-freetype")
+val lwjgl3BaseLibrariesNew = lwjgl3BaseLibraries + listOf("org.lwjgl:lwjgl-freetype")
 
 fun lwjgl3_3_4SnapshotVersion(lib: String) = if (lib == "org.lwjgl:lwjgl-stb" || lib == "org.lwjgl:lwjgl-tinyfd")
     "3.3.4-20231218.151521-3"
@@ -216,13 +216,19 @@ rootProject.tasks.create("generateJson") {
                     redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.3.2:natives-linux-arm64"))
                 }
 
-                // Minecraft 1.14 ~ 1.18
+                // Minecraft 1.14 ~ 1.14.2
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.2.1", mavenLibrary("$lib:3.3.2", repo = MavenRepo.MOJANG))
+                    redirect("$lib:3.2.1:natives", mavenLibrary("$lib:3.3.2:natives-linux-arm64"))
+                }
+
+                // Minecraft 1.14.3 ~ 1.18
                 for (lib in lwjgl3BaseLibraries) {
                     redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.2", repo = MavenRepo.MOJANG))
                     redirect("$lib:3.2.2:natives", mavenLibrary("$lib:3.3.2:natives-linux-arm64"))
                 }
 
-                // Minecraft 1.19~1.20.1
+                // Minecraft 1.19 ~ 1.20.1
                 for (lib in lwjgl3BaseLibraries) {
                     redirect("$lib:3.3.1", mavenLibrary("$lib:3.3.2", repo = MavenRepo.MOJANG))
                     redirect("$lib:3.3.1:natives-linux", mavenLibrary("$lib:3.3.2:natives-linux-arm64"))
@@ -234,7 +240,7 @@ rootProject.tasks.create("generateJson") {
                 }
 
                 // Minecraft 1.20.5+
-                for (lib in lwjgl3_3_3BaseLibraries) {
+                for (lib in lwjgl3BaseLibrariesNew) {
                     redirect("$lib:3.3.3:natives-linux", mavenLibrary("$lib:3.3.3:natives-linux-arm64"))
                 }
 
@@ -259,7 +265,13 @@ rootProject.tasks.create("generateJson") {
                     redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.2.3:natives-linux-arm32"))
                 }
 
-                // Minecraft 1.14 ~ 1.18
+                // Minecraft 1.14 ~ 1.14.2
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.2.1", mavenLibrary("$lib:3.2.3"))
+                    redirect("$lib:3.2.1:natives", mavenLibrary("$lib:3.2.3:natives-linux-arm32"))
+                }
+
+                // Minecraft 1.14.3 ~ 1.18
                 for (lib in lwjgl3BaseLibraries) {
                     redirect("$lib:3.2.2", mavenLibrary("$lib:3.2.3"))
                     redirect("$lib:3.2.2:natives", mavenLibrary("$lib:3.2.3:natives-linux-arm32"))
@@ -270,8 +282,8 @@ rootProject.tasks.create("generateJson") {
                     redirect("$lib:3.3.1:natives-linux", mavenLibrary("$lib:3.3.1:natives-linux-arm32"))
                 }
 
-                // Minecraft 1.6~1.12
-                val lwjgl2Natives = buildMap<String, Any> {
+                // Minecraft 1.6 ~ 1.12
+                val lwjgl2Natives = buildMap {
                     val artifact =
                         (mavenLibrary("org.glavo.hmcl:lwjgl2-natives:2.9.3-linux-arm32")["downloads"] as Map<String, Any>)["artifact"] as Map<String, Any>
 
@@ -336,7 +348,16 @@ rootProject.tasks.create("generateJson") {
                         redirectToEmpty("$lib:3.1.6:natives")
                 }
 
-                // Minecraft 1.14 ~ 1.18
+                // Minecraft 1.14 ~ 1.14.2
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.2.1", mavenLibrary("$lib:3.3.1"))
+                    if (lib == "org.lwjgl:lwjgl")
+                        redirect("$lib:3.2.1:natives", lwjgl3Natives)
+                    else
+                        redirectToEmpty("$lib:3.1.6:natives")
+                }
+
+                // Minecraft 1.14.3 ~ 1.18
                 for (lib in lwjgl3BaseLibraries) {
                     redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
                     if (lib == "org.lwjgl:lwjgl")
@@ -385,7 +406,16 @@ rootProject.tasks.create("generateJson") {
                         redirectToEmpty("$lib:3.1.6:natives")
                 }
 
-                // Minecraft 1.14 ~ 1.18
+                // Minecraft 1.14 ~ 1.14.2
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.2.1", mavenLibrary("$lib:3.3.1"))
+                    if (lib == "org.lwjgl:lwjgl")
+                        redirect("$lib:3.2.1:natives", lwjgl3Natives)
+                    else
+                        redirectToEmpty("$lib:3.2.1:natives")
+                }
+
+                // Minecraft 1.14.3 ~ 1.18
                 for (lib in lwjgl3BaseLibraries) {
                     redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
                     if (lib == "org.lwjgl:lwjgl")
@@ -401,7 +431,6 @@ rootProject.tasks.create("generateJson") {
                     else
                         redirectToEmpty("$lib:3.3.1:natives-linux")
                 }
-
 
                 // JNA
                 val jna = mavenLibrary("net.java.dev.jna:jna:5.13.0");
@@ -440,7 +469,16 @@ rootProject.tasks.create("generateJson") {
                         redirectToEmpty("$lib:3.1.6:natives")
                 }
 
-                // Minecraft 1.14 ~ 1.18
+                // Minecraft 1.14 ~ 1.14.2
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.2.1", mavenLibrary("$lib:3.3.1"))
+                    if (lib == "org.lwjgl:lwjgl")
+                        redirect("$lib:3.2.1:natives", lwjgl3Natives)
+                    else
+                        redirectToEmpty("$lib:3.2.1:natives")
+                }
+
+                // Minecraft 1.14.3 ~ 1.18
                 for (lib in lwjgl3BaseLibraries) {
                     redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
                     if (lib == "org.lwjgl:lwjgl")
@@ -471,53 +509,41 @@ rootProject.tasks.create("generateJson") {
                 redirectAllToEmpty(*allLinuxText2speech)
             },
             "linux-riscv64" to buildRedirectMap {
-                // Minecraft 1.13~1.19+
-                val lwjgl3Natives = lwjglNatives("linux", "riscv64", "3.3.1-rc1")
-
                 // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.1"))
-                    if (lib == "org.lwjgl:lwjgl")
-                        redirect("$lib:3.1.6:natives", lwjgl3Natives)
-                    else
-                        redirectToEmpty("$lib:3.1.6:natives")
+                    redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.4"))
+                    redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))
                 }
 
-                // Minecraft 1.14 ~ 1.18
+                // Minecraft 1.14 ~ 1.14.2
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
-                    if (lib == "org.lwjgl:lwjgl")
-                        redirect("$lib:3.2.2:natives", lwjgl3Natives)
-                    else
-                        redirectToEmpty("$lib:3.2.2:natives")
+                    redirect("$lib:3.2.1", mavenLibrary("$lib:3.3.4"))
+                    redirect("$lib:3.2.1:natives", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))
                 }
 
-                // Minecraft 1.19~1.20.1
+                // Minecraft 1.14.3 ~ 1.18
                 for (lib in lwjgl3BaseLibraries) {
-                    if (lib == "org.lwjgl:lwjgl")
-                        redirect("$lib:3.3.1:natives-linux", lwjgl3Natives)
-                    else
-                        redirectToEmpty("$lib:3.3.1:natives-linux")
+                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.4"))
+                    redirect("$lib:3.2.2:natives", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))
                 }
 
-
-                fun officialMavenLibrary(lib: String, natives: Boolean): Map<String, Any> {
-                    return mavenLibrary("$lib:3.3.4-SNAPSHOT" + (if (natives) ":natives-linux-riscv64" else ""),
-                        snapshot = lwjgl3_3_4SnapshotVersion(lib), repo = MavenRepo.SONATYPE_SNAPSHOTS)
+                // Minecraft 1.19 ~ 1.20.1
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.3.1", mavenLibrary("$lib:3.3.4"))
+                    redirect("$lib:3.3.1:natives-linux", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))
                 }
 
                 // Minecraft 1.20.2+
                 for (lib in lwjgl3BaseLibraries) {
-                    val snapshot = lwjgl3_3_4SnapshotVersion(lib)
-
-                    redirect("$lib:3.3.2", mavenLibrary("$lib:3.3.4-SNAPSHOT",
-                        snapshot = snapshot, repo = MavenRepo.SONATYPE_SNAPSHOTS))
-
-                    redirect("$lib:3.3.2:natives-linux", mavenLibrary(
-                        "$lib:3.3.4-SNAPSHOT:natives-linux-riscv64",
-                        snapshot = snapshot, repo = MavenRepo.SONATYPE_SNAPSHOTS))
+                    redirect("$lib:3.3.2", mavenLibrary("$lib:3.3.4"))
+                    redirect("$lib:3.3.2:natives-linux", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))
                 }
 
+                // Minecraft 1.20.5+
+                for (lib in lwjgl3BaseLibrariesNew) {
+                    redirect("$lib:3.3.3", mavenLibrary("$lib:3.3.4"))
+                    redirect("$lib:3.3.3:natives-linux", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))
+                }
 
                 redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
                 redirectAllToEmpty(*allLinuxText2speech)
@@ -544,21 +570,20 @@ rootProject.tasks.create("generateJson") {
                 // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
                     redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.2", repo = MavenRepo.MOJANG))
-                    redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.3.2:natives-windows-arm64", repo = MavenRepo.MOJANG))
+                    redirect(
+                        "$lib:3.1.6:natives",
+                        mavenLibrary("$lib:3.3.2:natives-windows-arm64", repo = MavenRepo.MOJANG)
+                    )
                 }
 
                 // Minecraft 1.14 ~ 1.18
                 for (lib in lwjgl3BaseLibraries) {
                     redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.2", repo = MavenRepo.MOJANG))
-                    redirect("$lib:3.2.2:natives", mavenLibrary("$lib:3.3.2:natives-windows-arm64", repo = MavenRepo.MOJANG))
+                    redirect(
+                        "$lib:3.2.2:natives",
+                        mavenLibrary("$lib:3.3.2:natives-windows-arm64", repo = MavenRepo.MOJANG)
+                    )
                 }
-
-//                // Minecraft 1.19~1.20.1
-//                for (lib in lwjgl3BaseLibraries) {
-//                    redirect("$lib:3.3.1", mavenLibrary("$lib:3.3.2"))
-//                    redirect("$lib:3.3.1:natives-windows", mavenLibrary("$lib:3.3.2:natives-windows-arm64"))
-//                    redirectToEmpty("$lib:3.3.1:natives-windows-x86")
-//                }
 
                 redirectAllToEmpty(
                     "net.java.jinput:jinput-platform:2.0.5:natives",
@@ -586,7 +611,10 @@ rootProject.tasks.create("generateJson") {
                         redirect("$lib:3.1.6", mavenLibrary("org.glavo.hmcl.mmachina:lwjgl-glfw:3.3.1-mmachina.1"))
                     else
                         redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.1"))
-                    redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.3.1:natives-macos-arm64", repo = MavenRepo.MOJANG))
+                    redirect(
+                        "$lib:3.1.6:natives",
+                        mavenLibrary("$lib:3.3.1:natives-macos-arm64", repo = MavenRepo.MOJANG)
+                    )
                 }
 
                 // Minecraft 1.14 ~ 1.18
@@ -595,14 +623,23 @@ rootProject.tasks.create("generateJson") {
                         redirect("$lib:3.2.1", mavenLibrary("org.glavo.hmcl.mmachina:lwjgl-glfw:3.3.1-mmachina.1"))
                     else
                         redirect("$lib:3.2.1", mavenLibrary("$lib:3.3.1"))
-                    redirect("$lib:3.2.1:natives", mavenLibrary("$lib:3.3.1:natives-macos-arm64", repo = MavenRepo.MOJANG))
+                    redirect(
+                        "$lib:3.2.1:natives",
+                        mavenLibrary("$lib:3.3.1:natives-macos-arm64", repo = MavenRepo.MOJANG)
+                    )
                 }
 
-                redirect("ca.weblite:java-objc-bridge:1.0.0", mavenLibrary("org.glavo.hmcl.mmachina:java-objc-bridge:1.1.0-mmachina.1"))
+                redirect(
+                    "ca.weblite:java-objc-bridge:1.0.0",
+                    mavenLibrary("org.glavo.hmcl.mmachina:java-objc-bridge:1.1.0-mmachina.1")
+                )
                 redirectToEmpty("ca.weblite:java-objc-bridge:1.0.0:natives")
 
 
-                redirect("com.mojang:text2speech:1.10.3", mavenLibrary("com.mojang:text2speech:1.11.3", repo = MavenRepo.MOJANG))
+                redirect(
+                    "com.mojang:text2speech:1.10.3",
+                    mavenLibrary("com.mojang:text2speech:1.11.3", repo = MavenRepo.MOJANG)
+                )
 
                 redirectAllToEmpty(
                     "net.java.jinput:jinput-platform:2.0.5:natives",
@@ -612,34 +649,34 @@ rootProject.tasks.create("generateJson") {
                 )
             },
             "freebsd-x86_64" to buildRedirectMap {
-
-                fun freebsdMavenLibrary(lib: String, natives: Boolean): Map<String, Any> {
-                    return mavenLibrary("$lib:3.3.4-SNAPSHOT" + (if (natives) ":natives-freebsd" else ""),
-                        snapshot = lwjgl3_3_4SnapshotVersion(lib), repo = MavenRepo.SONATYPE_SNAPSHOTS)
-                }
-
                 // Minecraft 1.13
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.1.6", freebsdMavenLibrary(lib, false))
-                    redirect("$lib:3.1.6:natives", freebsdMavenLibrary(lib, true))
+                    redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.4"))
+                    redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.3.4:natives-freebsd"))
                 }
 
-                // Minecraft 1.14 ~ 1.18
+                // Minecraft 1.14 ~ 1.14.2
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.2.2", freebsdMavenLibrary(lib, false))
-                    redirect("$lib:3.2.2:natives", freebsdMavenLibrary(lib, true))
+                    redirect("$lib:3.2.1", mavenLibrary("$lib:3.3.4"))
+                    redirect("$lib:3.2.1:natives", mavenLibrary("$lib:3.3.4:natives-freebsd"))
+                }
+
+                // Minecraft 1.14.3 ~ 1.18
+                for (lib in lwjgl3BaseLibraries) {
+                    redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.4"))
+                    redirect("$lib:3.2.2:natives", mavenLibrary("$lib:3.3.4:natives-freebsd"))
                 }
 
                 // Minecraft 1.19~1.20.1
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.3.1", freebsdMavenLibrary(lib, false))
-                    redirect("$lib:3.3.1:natives-linux", freebsdMavenLibrary(lib, true))
+                    redirect("$lib:3.3.1", mavenLibrary("$lib:3.3.4"))
+                    redirect("$lib:3.3.1:natives", mavenLibrary("$lib:3.3.4:natives-freebsd"))
                 }
 
                 // Minecraft 1.20.2+
                 for (lib in lwjgl3BaseLibraries) {
-                    redirect("$lib:3.3.2", freebsdMavenLibrary(lib, false))
-                    redirect("$lib:3.3.2:natives-linux", freebsdMavenLibrary(lib, true))
+                    redirect("$lib:3.3.2", mavenLibrary("$lib:3.3.4"))
+                    redirect("$lib:3.3.2:natives", mavenLibrary("$lib:3.3.4:natives-freebsd"))
                 }
 
                 redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")

@@ -1,6 +1,5 @@
 import java.io.File
 import java.net.URI
-import java.net.URL
 
 enum class MavenRepo(val url: String, val mirrorURL: String = url) {
     MAVEN_CENTRAL("https://repo1.maven.org/maven2", mirrorURL = "https://maven.aliyun.com/repository/central"),
