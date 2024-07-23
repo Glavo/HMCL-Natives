@@ -204,11 +204,6 @@ val allLinuxText2speech = arrayOf(
     "com.mojang:text2speech:1.13.9:natives-linux"
 )
 
-fun lwjgl3_3_4SnapshotVersion(lib: String) = if (lib == "org.lwjgl:lwjgl-stb" || lib == "org.lwjgl:lwjgl-tinyfd")
-    "3.3.4-20231218.151521-3"
-else
-    "3.3.4-20231218.151521-4"
-
 val jsonFile = rootProject.layout.buildDirectory.asFile.get().resolve("natives.json")
 rootProject.tasks.create("generateJson") {
     doLast {

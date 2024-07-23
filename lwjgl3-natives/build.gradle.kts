@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(kotlin.ExperimentalStdlibApi::class)
-
 plugins {
     id("java")
     signing
