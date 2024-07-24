@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import org.gradle.api.Project
 import java.io.InputStream
 import java.security.*
 
@@ -31,11 +30,4 @@ fun sha1(input: InputStream): String {
     }
 
     return sha1ByteArrayToString(sha1MessageDigest.digest())
-}
-
-
-internal lateinit var project: Project
-
-fun initProject(p: Project) {
-    project = p
 }

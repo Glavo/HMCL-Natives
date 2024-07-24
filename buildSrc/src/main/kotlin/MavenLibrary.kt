@@ -1,3 +1,5 @@
+import org.gradle.api.Project
+
 /*
  * Copyright 2024 Glavo
  *
@@ -18,7 +20,7 @@ typealias MavenLibrary = Map<String, Any>
 
 private val pattern = Regex("(?<groupId>[^:]+):(?<artifactId>[^:]+):(?<version>[^:]+)(:(?<classifier>[^:]+))?").toPattern()
 
-fun mavenLibrary(name: String, snapshot: String? = null, repo: MavenRepo = MavenRepo.MAVEN_CENTRAL): MavenLibrary {
+fun Project.mavenLibrary(name: String, snapshot: String? = null, repo: MavenRepo = MavenRepo.MAVEN_CENTRAL): MavenLibrary {
     val matcher = pattern.matcher(name)
     if (!matcher.matches())
         throw AssertionError("name=$name")
@@ -51,7 +53,7 @@ fun mavenLibrary(name: String, snapshot: String? = null, repo: MavenRepo = Maven
     }
     val url = "${repo.url}/$path"
 
-    val (fileSize, sha1) = repo.downloadFile(path)
+    val (fileSize, sha1) = repo.downloadFile(this, path)
 
     return mapOf(
         "name" to name,

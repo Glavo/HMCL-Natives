@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import org.gradle.api.Project
 import java.io.File
 import java.net.URI
 
@@ -22,7 +23,7 @@ enum class MavenRepo(val url: String, val mirrorURL: String = url) {
     MOJANG("https://libraries.minecraft.net"),
     SONATYPE_SNAPSHOTS("https://oss.sonatype.org/content/repositories/snapshots");
 
-    private fun downloadSHA1(path: String): String {
+    private fun downloadSHA1(project: Project, path: String): String {
         val baseDir: File = project.layout.buildDirectory.asFile.get().resolve("cache")
         val targetFile = baseDir.resolve(path)
 
@@ -44,11 +45,11 @@ enum class MavenRepo(val url: String, val mirrorURL: String = url) {
         return res
     }
 
-    fun downloadFile(path: String): Pair<Long, String> {
+    fun downloadFile(project: Project, path: String): Pair<Long, String> {
         val baseDir = project.layout.buildDirectory.asFile.get().resolve("cache")
         val targetFile = baseDir.resolve(path)
 
-        val expectedSHA1 = downloadSHA1("$path.sha1")
+        val expectedSHA1 = downloadSHA1(project, "$path.sha1")
         if (targetFile.exists() && targetFile.inputStream().use { sha1(it) } == expectedSHA1) {
             return Pair(targetFile.length(), expectedSHA1)
         }

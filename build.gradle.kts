@@ -81,8 +81,6 @@ tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
 
-initProject(rootProject)
-
 fun lwjglNatives(os: String, arch: String, version: String) = buildMap {
     val artifactId = when {
         version.startsWith('2') -> "lwjgl2-natives"
