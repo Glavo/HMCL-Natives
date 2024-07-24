@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-class MapBuilder {
-    private val map: MutableMap<String, Map<String, Any>?> = LinkedHashMap()
+class RedirectMapBuilder {
+    private val map: MutableMap<String, MavenLibrary?> = LinkedHashMap()
 
     fun build(): Map<String, Map<String, Any>?> = map
 
-    fun redirect(lib: String, newLibrary: Map<String, Any>?) {
+    fun redirect(lib: String, newLibrary: MavenLibrary?) {
         map[lib] = newLibrary
     }
 
@@ -32,3 +32,6 @@ class MapBuilder {
             redirectToEmpty(lib)
     }
 }
+
+inline fun buildRedirectMap(f: RedirectMapBuilder.() -> Unit): Map<String, MavenLibrary?> =
+    RedirectMapBuilder().apply { f() }.build()

@@ -83,60 +83,6 @@ tasks.getByName<Test>("test") {
 
 initProject(rootProject)
 
-val pattern = Regex("(?<groupId>[^:]+):(?<artifactId>[^:]+):(?<version>[^:]+)(:(?<classifier>[^:]+))?").toPattern()
-fun mavenLibrary(name: String, snapshot: String? = null, repo: MavenRepo = MavenRepo.MAVEN_CENTRAL): Map<String, Any> {
-    val matcher = pattern.matcher(name)
-    if (!matcher.matches())
-        throw AssertionError("name=$name")
-
-    val groupId = matcher.group("groupId")!!
-    val artifactId = matcher.group("artifactId")!!
-    val version = matcher.group("version")!!
-    val classifier = matcher.group("classifier")
-
-    val path = buildString {
-        append(groupId.replace('.', '/'))
-        append("/")
-        append(artifactId)
-        append("/")
-        append(version)
-        append("/")
-
-        append(artifactId)
-        append('-')
-
-        if (snapshot == null)
-            append(version)
-        else
-            append(snapshot)
-        if (classifier != null) {
-            append('-')
-            append(classifier)
-        }
-        append(".jar")
-    }
-    val url = "${repo.url}/$path"
-
-    val (fileSize, sha1) = repo.downloadFile(path)
-
-    return mapOf(
-        "name" to name,
-        "downloads" to mapOf(
-            "artifact" to mapOf(
-                "path" to path,
-                "url" to url,
-                "sha1" to sha1,
-                "size" to fileSize
-            )
-        )
-    )
-}
-
-fun emptyLibrary(name: String): Map<String, Any> = mapOf("name" to name)
-
-inline fun buildRedirectMap(f: MapBuilder.() -> Unit): Map<String, Map<String, Any>?> =
-    MapBuilder().apply { f() }.build()
-
 fun lwjglNatives(os: String, arch: String, version: String) = buildMap {
     val artifactId = when {
         version.startsWith('2') -> "lwjgl2-natives"
@@ -183,7 +129,7 @@ val allLinuxText2speech = arrayOf(
 val jsonFile = rootProject.layout.buildDirectory.asFile.get().resolve("natives.json")
 rootProject.tasks.create("generateJson") {
     doLast {
-        val map: Map<String, Map<String, Map<String, Any>?>> = mapOf(
+        val map: Map<String, Map<String, MavenLibrary?>> = mapOf(
             "linux-arm64" to buildRedirectMap {
                 // Minecraft 1.13
                 for (lib in LWJGL.base0) {
