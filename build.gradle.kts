@@ -15,7 +15,6 @@
  */
 
 @file:Suppress("UNCHECKED_CAST")
-@file:OptIn(kotlin.ExperimentalStdlibApi::class)
 
 import java.util.Properties
 
