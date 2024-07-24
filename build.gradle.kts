@@ -134,29 +134,6 @@ fun mavenLibrary(name: String, snapshot: String? = null, repo: MavenRepo = Maven
 
 fun emptyLibrary(name: String): Map<String, Any> = mapOf("name" to name)
 
-class MapBuilder {
-    private val map: MutableMap<String, Map<String, Any>?> = LinkedHashMap()
-
-    fun build(): Map<String, Map<String, Any>?> = map
-
-    fun redirect(lib: String, newLibrary: Map<String, Any>?) {
-        map[lib] = newLibrary
-    }
-
-    fun redirectToEmpty(lib: String) {
-        redirect(lib, null)
-    }
-
-    fun redirectAllToEmpty(vararg libs: String) {
-        for (lib in libs)
-            redirectToEmpty(lib)
-    }
-
-    companion object {
-        val noVersionPattern = Regex("(?<groupId>[^:]+):(?<artifactId>[^:]+)(:(?<classifier>[^:]+))?").toPattern()
-    }
-}
-
 inline fun buildRedirectMap(f: MapBuilder.() -> Unit): Map<String, Map<String, Any>?> =
     MapBuilder().apply { f() }.build()
 
