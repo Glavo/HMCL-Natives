@@ -33,11 +33,8 @@ enum class LWJGL(isBase: Boolean = false) {
 
     companion object {
         val base0 = listOf(BASE, JEMALLOC, OPENAL, OPENGL, GLFW, STB, TINYFD)
-        val base1 = base0 + FREETYPE
 
-        @JvmStatic
-        fun main(args: Array<String>) {
-            base1.forEach { println(it.fullName) }
-        }
+        // 1.20.5+
+        val base1 = base0 + FREETYPE
     }
 }
