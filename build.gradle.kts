@@ -311,11 +311,12 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         }
 
         // Minecraft 1.13~1.19+
-        val lwjgl3Natives = lwjglNatives("linux", "loongarch64", "3.3.1-rc1")
+        val lwjgl3Version = "3.3.4"
+        val lwjgl3Natives = lwjglNatives("linux", "loongarch64", "3.3.4-rc2")
 
         // Minecraft 1.13
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.1"))
+            redirect("$lib:3.1.6", mavenLibrary("$lib:$lwjgl3Version"))
             if (lib == LWJGL.BASE)
                 redirect("$lib:3.1.6:natives", lwjgl3Natives)
             else
@@ -324,7 +325,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
 
         // Minecraft 1.14 ~ 1.14.2
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.2.1", mavenLibrary("$lib:3.3.1"))
+            redirect("$lib:3.2.1", mavenLibrary("$lib:$lwjgl3Version"))
             if (lib == LWJGL.BASE)
                 redirect("$lib:3.2.1:natives", lwjgl3Natives)
             else
@@ -333,19 +334,38 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
 
         // Minecraft 1.14.3 ~ 1.18
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
+            redirect("$lib:3.2.2", mavenLibrary("$lib:$lwjgl3Version"))
             if (lib == LWJGL.BASE)
                 redirect("$lib:3.2.2:natives", lwjgl3Natives)
             else
                 redirectToEmpty("$lib:3.2.2:natives")
         }
 
-        // Minecraft 1.19+
+        // Minecraft 1.19 ~ 1.20.1
         for (lib in LWJGL.base0) {
+            redirect("$lib:3.3.1", mavenLibrary("$lib:$lwjgl3Version"))
             if (lib == LWJGL.BASE)
                 redirect("$lib:3.3.1:natives-linux", lwjgl3Natives)
             else
                 redirectToEmpty("$lib:3.3.1:natives-linux")
+        }
+
+        // Minecraft 1.20.2~1.20.4
+        for (lib in LWJGL.base0) {
+            redirect("$lib:3.3.2", mavenLibrary("$lib:$lwjgl3Version"))
+            if (lib == LWJGL.BASE)
+                redirect("$lib:3.3.2:natives-linux", lwjgl3Natives)
+            else
+                redirectToEmpty("$lib:3.3.2:natives-linux")
+        }
+
+        // Minecraft 1.20.5+
+        for (lib in LWJGL.base1) {
+            redirect("$lib:3.3.3", mavenLibrary("$lib:$lwjgl3Version"))
+            if (lib == LWJGL.BASE)
+                redirect("$lib:3.3.3:natives-linux", lwjgl3Natives)
+            else
+                redirectToEmpty("$lib:3.3.3:natives-linux")
         }
 
         // JNA
@@ -449,7 +469,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             redirect("$lib:3.3.1:natives-linux", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))
         }
 
-        // Minecraft 1.20.2+
+        // Minecraft 1.20.2~1.20.4
         for (lib in LWJGL.base0) {
             redirect("$lib:3.3.2", mavenLibrary("$lib:3.3.4"))
             redirect("$lib:3.3.2:natives-linux", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))

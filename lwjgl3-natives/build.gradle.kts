@@ -42,7 +42,7 @@ val platforms = listOf(
 )
 
 val platformJarVersion: Map<String, String> = mutableMapOf<String, String>().apply{
-    put("linux-loongarch64", "3.3.4-rc1")
+    put("linux-loongarch64", "3.3.4-rc2")
     put("linux-loongarch64_ow", "3.3.1-rc1")
     put("linux-mips64el", "3.3.1-rc2")
 
