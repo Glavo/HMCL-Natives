@@ -45,10 +45,6 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
-
 fun lwjglNatives(os: String, arch: String, version: String) = buildMap {
     val artifactId = when {
         version.startsWith('2') -> "lwjgl2-natives"
@@ -591,7 +587,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
 )
 
 val jsonFile = rootProject.layout.buildDirectory.asFile.get().resolve("natives.json")
-rootProject.tasks.create("generateJson") {
+rootProject.tasks.register("generateJson") {
     doLast {
         jsonFile.parentFile.mkdirs()
         jsonFile.writeText(com.google.gson.GsonBuilder().setPrettyPrinting().serializeNulls().create().toJson(generate()))
