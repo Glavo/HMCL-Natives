@@ -16,51 +16,19 @@
 
 @file:Suppress("UNCHECKED_CAST")
 
-import java.util.Properties
-
 buildscript {
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        classpath("com.google.code.gson:gson:2.10.1")
+        classpath("com.google.code.gson:gson:2.11.0")
     }
 }
 
 plugins {
     id("java")
-}
-
-var secretPropsFile = project.rootProject.file("gradle/maven-central-publish.properties")
-if (!secretPropsFile.exists()) {
-    secretPropsFile =
-        file(System.getProperty("user.home")).resolve(".gradle").resolve("maven-central-publish.properties")
-}
-
-if (secretPropsFile.exists()) {
-    // Read local.properties file first if it exists
-    val p = Properties()
-    secretPropsFile.reader().use {
-        p.load(it)
-    }
-
-    p.forEach { (name, value) ->
-        rootProject.ext[name.toString()] = value
-    }
-}
-
-listOf(
-    "sonatypeUsername" to "SONATYPE_USERNAME",
-    "sonatypePassword" to "SONATYPE_PASSWORD",
-    "sonatypeStagingProfileId" to "SONATYPE_STAGING_PROFILE_ID",
-    "signing.keyId" to "SIGNING_KEY_ID",
-    "signing.password" to "SIGNING_PASSWORD",
-    "signing.key" to "SIGNING_KEY"
-).forEach { (p, e) ->
-    if (!rootProject.ext.has(p)) {
-        rootProject.ext[p] = System.getenv(e)
-    }
+    id("org.glavo.load-maven-publish-properties") version "0.1.0"
 }
 
 allprojects {
