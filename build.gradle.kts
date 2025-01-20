@@ -275,59 +275,59 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         }
 
         // Minecraft 1.13~1.19+
-        val lwjgl3Version = "3.3.4"
-        val lwjgl3Natives = lwjglNatives("linux", "loongarch64", "3.3.4-rc2")
+        val lwjgl3_3_1Natives = lwjglNatives("linux", "loongarch64", "3.3.1-rc1")
 
         // Minecraft 1.13
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.1.6", mavenLibrary("$lib:$lwjgl3Version"))
+            redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.1"))
             if (lib == LWJGL.BASE)
-                redirect("$lib:3.1.6:natives", lwjgl3Natives)
+                redirect("$lib:3.1.6:natives", lwjgl3_3_1Natives)
             else
                 redirectToEmpty("$lib:3.1.6:natives")
         }
 
         // Minecraft 1.14 ~ 1.14.2
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.2.1", mavenLibrary("$lib:$lwjgl3Version"))
+            redirect("$lib:3.2.1", mavenLibrary("$lib:3.3.1"))
             if (lib == LWJGL.BASE)
-                redirect("$lib:3.2.1:natives", lwjgl3Natives)
+                redirect("$lib:3.2.1:natives", lwjgl3_3_1Natives)
             else
                 redirectToEmpty("$lib:3.2.1:natives")
         }
 
         // Minecraft 1.14.3 ~ 1.18
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.2.2", mavenLibrary("$lib:$lwjgl3Version"))
+            redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.1"))
             if (lib == LWJGL.BASE)
-                redirect("$lib:3.2.2:natives", lwjgl3Natives)
+                redirect("$lib:3.2.2:natives", lwjgl3_3_1Natives)
             else
                 redirectToEmpty("$lib:3.2.2:natives")
         }
 
         // Minecraft 1.19 ~ 1.20.1
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.3.1", mavenLibrary("$lib:$lwjgl3Version"))
             if (lib == LWJGL.BASE)
-                redirect("$lib:3.3.1:natives-linux", lwjgl3Natives)
+                redirect("$lib:3.3.1:natives-linux", lwjgl3_3_1Natives)
             else
                 redirectToEmpty("$lib:3.3.1:natives-linux")
         }
 
+        val lwjgl3_3_4Natives = lwjglNatives("linux", "loongarch64", "3.3.4-rc2")
+
         // Minecraft 1.20.2~1.20.4
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.3.2", mavenLibrary("$lib:$lwjgl3Version"))
+            redirect("$lib:3.3.2", mavenLibrary("$lib:3.3.4"))
             if (lib == LWJGL.BASE)
-                redirect("$lib:3.3.2:natives-linux", lwjgl3Natives)
+                redirect("$lib:3.3.2:natives-linux", lwjgl3_3_4Natives)
             else
                 redirectToEmpty("$lib:3.3.2:natives-linux")
         }
 
         // Minecraft 1.20.5+
         for (lib in LWJGL.base1) {
-            redirect("$lib:3.3.3", mavenLibrary("$lib:$lwjgl3Version"))
+            redirect("$lib:3.3.3", mavenLibrary("$lib:3.3.4"))
             if (lib == LWJGL.BASE)
-                redirect("$lib:3.3.3:natives-linux", lwjgl3Natives)
+                redirect("$lib:3.3.3:natives-linux", lwjgl3_3_4Natives)
             else
                 redirectToEmpty("$lib:3.3.3:natives-linux")
         }
@@ -449,7 +449,6 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         redirectAllToEmpty(*allLinuxText2speech)
     },
     "windows-x86_64" to buildRedirectMap {
-        redirect("software-renderer-loader", mavenLibrary("org.glavo:llvmpipe-loader:1.0"))
         redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:0.3.0:x64"))
     },
     "windows-x86" to buildRedirectMap {
@@ -551,34 +550,42 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         )
     },
     "freebsd-x86_64" to buildRedirectMap {
+        val lwjgl3Version = "3.3.4"
+
         // Minecraft 1.13
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.1.6", mavenLibrary("$lib:3.3.4"))
-            redirect("$lib:3.1.6:natives", mavenLibrary("$lib:3.3.4:natives-freebsd"))
+            redirect("$lib:3.1.6", mavenLibrary("$lib:$lwjgl3Version"))
+            redirect("$lib:3.1.6:natives", mavenLibrary("$lib:$lwjgl3Version:natives-freebsd"))
         }
 
         // Minecraft 1.14 ~ 1.14.2
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.2.1", mavenLibrary("$lib:3.3.4"))
-            redirect("$lib:3.2.1:natives", mavenLibrary("$lib:3.3.4:natives-freebsd"))
+            redirect("$lib:3.2.1", mavenLibrary("$lib:$lwjgl3Version"))
+            redirect("$lib:3.2.1:natives", mavenLibrary("$lib:$lwjgl3Version:natives-freebsd"))
         }
 
         // Minecraft 1.14.3 ~ 1.18
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.2.2", mavenLibrary("$lib:3.3.4"))
-            redirect("$lib:3.2.2:natives", mavenLibrary("$lib:3.3.4:natives-freebsd"))
+            redirect("$lib:3.2.2", mavenLibrary("$lib:$lwjgl3Version"))
+            redirect("$lib:3.2.2:natives", mavenLibrary("$lib:$lwjgl3Version:natives-freebsd"))
         }
 
         // Minecraft 1.19~1.20.1
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.3.1", mavenLibrary("$lib:3.3.4"))
-            redirect("$lib:3.3.1:natives", mavenLibrary("$lib:3.3.4:natives-freebsd"))
+            redirect("$lib:3.3.1", mavenLibrary("$lib:$lwjgl3Version"))
+            redirect("$lib:3.3.1:natives-linux", mavenLibrary("$lib:$lwjgl3Version:natives-freebsd"))
         }
 
-        // Minecraft 1.20.2+
+        // Minecraft 1.20.2~1.20.4
         for (lib in LWJGL.base0) {
-            redirect("$lib:3.3.2", mavenLibrary("$lib:3.3.4"))
-            redirect("$lib:3.3.2:natives", mavenLibrary("$lib:3.3.4:natives-freebsd"))
+            redirect("$lib:3.3.2", mavenLibrary("$lib:$lwjgl3Version"))
+            redirect("$lib:3.3.2:natives-linux", mavenLibrary("$lib:$lwjgl3Version:natives-freebsd"))
+        }
+
+        // Minecraft 1.20.5+
+        for (lib in LWJGL.base1) {
+            redirect("$lib:3.3.3", mavenLibrary("$lib:$lwjgl3Version"))
+            redirect("$lib:3.3.3:natives-linux", mavenLibrary("$lib:$lwjgl3Version:natives-freebsd"))
         }
 
         redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
