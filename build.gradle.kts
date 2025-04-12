@@ -445,6 +445,8 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             redirect("$lib:3.3.3:natives-linux", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))
         }
 
+        redirect("com.github.oshi:oshi-core:6.6.5", mavenLibrary("com.github.oshi:oshi-core:6.8.0"))
+
         redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
         redirectAllToEmpty(*allLinuxText2speech)
     },
