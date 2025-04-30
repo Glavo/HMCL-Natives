@@ -21,6 +21,7 @@ import java.net.URI
 enum class MavenRepo(val url: String, val mirrorURL: String = url) {
     MAVEN_CENTRAL("https://repo1.maven.org/maven2", mirrorURL = "https://maven.aliyun.com/repository/central"),
     MOJANG("https://libraries.minecraft.net"),
+    SONATYPE_PUBLIC("https://oss.sonatype.org/content/groups/public"),
     SONATYPE_SNAPSHOTS("https://oss.sonatype.org/content/repositories/snapshots");
 
     private fun downloadSHA1(project: Project, path: String): String {
