@@ -496,7 +496,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
 
         redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:25.0.3:arm64"))
     },
-    "osx-arm64" to buildRedirectMap {
+    "macos-arm64" to buildRedirectMap {
         // Minecraft 1.6~1.12
         val lwjgl2Natives = lwjglNatives("osx", "arm64", "2.9.3-rc1")
 
