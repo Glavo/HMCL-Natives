@@ -452,6 +452,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
     },
     "windows-x86_64" to buildRedirectMap {
         redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:25.3.5:x64"))
+        redirect("software-renderer-loader", mavenLibrary("org.glavo:llvmpipe-loader:1.0"))
     },
     "windows-x86" to buildRedirectMap {
         redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:25.3.5:x86"))
