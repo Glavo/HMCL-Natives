@@ -451,11 +451,11 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         redirectAllToEmpty(*allLinuxText2speech)
     },
     "windows-x86_64" to buildRedirectMap {
-        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:25.3.5:x64"))
+        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:25.0.3:x64"))
         redirect("software-renderer-loader", mavenLibrary("org.glavo:llvmpipe-loader:1.0"))
     },
     "windows-x86" to buildRedirectMap {
-        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:25.3.5:x86"))
+        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:25.0.3:x86"))
     },
     "windows-arm64" to buildRedirectMap {
         // Minecraft 1.6~1.12
@@ -495,7 +495,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             "com.mojang:text2speech:1.13.9:natives-windows"
         )
 
-        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:25.3.5:arm64"))
+        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:25.0.3:arm64"))
     },
     "macos-arm64" to buildRedirectMap {
         // Minecraft 1.6~1.12
