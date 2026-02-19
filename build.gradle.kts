@@ -119,9 +119,15 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             redirect("$lib:3.3.2:natives-linux", mavenLibrary("$lib:3.3.2:natives-linux-arm64"))
         }
 
-        // Minecraft 1.20.5+
+        // Minecraft 1.20.5-26.1-snapshot-7
         for (lib in LWJGL.base1) {
             redirect("$lib:3.3.3:natives-linux", mavenLibrary("$lib:3.3.3:natives-linux-arm64"))
+        }
+
+        // Minecraft 26.1-snapshot-8+
+        for (lib in LWJGL.base1) {
+            redirect("$lib:3.4.1", mavenLibrary("$lib:3.4.1"))
+            redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-linux-arm64"))
         }
 
         // Minecraft 1.6~1.12
@@ -439,10 +445,16 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             redirect("$lib:3.3.2:natives-linux", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))
         }
 
-        // Minecraft 1.20.5+
+        // Minecraft 1.20.5~26.1-snapshot-7
         for (lib in LWJGL.base1) {
             redirect("$lib:3.3.3", mavenLibrary("$lib:3.3.4"))
             redirect("$lib:3.3.3:natives-linux", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))
+        }
+
+        // Minecraft 26.1-snapshot-8+
+        for (lib in LWJGL.base1) {
+            redirect("$lib:3.4.1", mavenLibrary("$lib:3.4.1"))
+            redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-linux-riscv64"))
         }
 
         redirect("com.github.oshi:oshi-core:6.6.5", mavenLibrary("com.github.oshi:oshi-core:6.8.0"))
@@ -585,10 +597,16 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             redirect("$lib:3.3.2:natives-linux", mavenLibrary("$lib:$lwjgl3Version:natives-freebsd"))
         }
 
-        // Minecraft 1.20.5+
+        // Minecraft 1.20.5-26.1-snapshot-7
         for (lib in LWJGL.base1) {
             redirect("$lib:3.3.3", mavenLibrary("$lib:$lwjgl3Version"))
             redirect("$lib:3.3.3:natives-linux", mavenLibrary("$lib:$lwjgl3Version:natives-freebsd"))
+        }
+
+        // Minecraft 26.1-snapshot-8+
+        for (lib in LWJGL.base1) {
+            redirect("$lib:3.4.1", mavenLibrary("$lib:3.4.1"))
+            redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-freebsd"))
         }
 
         redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
