@@ -16,6 +16,9 @@
 
 @file:Suppress("UNCHECKED_CAST")
 
+import com.google.gson.GsonBuilder
+
+
 buildscript {
     repositories {
         mavenCentral()
@@ -80,6 +83,42 @@ fun lwjglNatives(os: String, arch: String, version: String) = buildMap {
         )
     )
 }
+
+// For local development
+fun lwjglNativesLocal(os: String, arch: String, version: String,
+                      url: String, sha1: String, size: Long) = buildMap {
+    val artifactId = when {
+        version.startsWith('2') -> "lwjgl2-natives"
+        version.startsWith('3') -> "lwjgl3-natives"
+        else -> throw AssertionError()
+    }
+
+    put("name", "org.glavo.hmcl:$artifactId:$version")
+    put(
+        "downloads", mapOf(
+            "classifiers" to mapOf(
+                "$os-$arch" to mapOf(
+                    "path" to "org/glavo/hmcl/$artifactId/$version/$artifactId-$version-$os-$arch.jar",
+                    "url" to url,
+                    "sha1" to sha1,
+                    "size" to size
+                )
+            )
+        )
+    )
+
+    put(
+        "extract", mapOf(
+            "exclude" to listOf("META-INF/")
+        )
+    )
+    put(
+        "natives", mapOf(
+            os to "$os-$arch"
+        )
+    )
+}
+
 
 val allLinuxText2speech = arrayOf(
     "com.mojang:text2speech:1.10.3:natives",
@@ -329,13 +368,21 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
                 redirectToEmpty("$lib:3.3.2:natives-linux")
         }
 
-        // Minecraft 1.20.5+
+        // Minecraft 1.20.5~26.1-snapshot-7
         for (lib in LWJGL.base1) {
             redirect("$lib:3.3.3", mavenLibrary("$lib:3.3.4"))
             if (lib == LWJGL.BASE)
                 redirect("$lib:3.3.3:natives-linux", lwjgl3_3_4Natives)
             else
                 redirectToEmpty("$lib:3.3.3:natives-linux")
+        }
+
+        // Minecraft 26.1-snapshot-8+
+        for (lib in LWJGL.base1) {
+            if (lib == LWJGL.BASE)
+                redirect("$lib:3.4.1:natives-linux", lwjglNatives("linux", "loongarch64", "3.4.1-rc1"))
+            else
+                redirectToEmpty("$lib:3.4.1:natives-linux")
         }
 
         // JNA
@@ -618,6 +665,6 @@ val jsonFile = rootProject.layout.buildDirectory.asFile.get().resolve("natives.j
 rootProject.tasks.register("generateJson") {
     doLast {
         jsonFile.parentFile.mkdirs()
-        jsonFile.writeText(com.google.gson.GsonBuilder().setPrettyPrinting().serializeNulls().create().toJson(generate()))
+        jsonFile.writeText(GsonBuilder().setPrettyPrinting().serializeNulls().create().toJson(generate()))
     }
 }
