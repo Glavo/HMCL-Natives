@@ -164,9 +164,9 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         }
 
         // Minecraft 26.1-snapshot-8+
-        for (lib in LWJGL.base1) {
-            redirect("$lib:3.4.1", mavenLibrary("$lib:3.4.1"))
-            redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-linux-arm64"))
+        for (lib in LWJGL.base2) {
+            if (lib != LWJGL.VULKAN)
+                redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-linux-arm64"))
         }
 
         // Minecraft 1.6~1.12
@@ -378,10 +378,10 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         }
 
         // Minecraft 26.1-snapshot-8+
-        for (lib in LWJGL.base1) {
+        for (lib in LWJGL.base2) {
             if (lib == LWJGL.BASE)
                 redirect("$lib:3.4.1:natives-linux", lwjglNatives("linux", "loongarch64", "3.4.1-rc1"))
-            else
+            else if (lib != LWJGL.VULKAN)
                 redirectToEmpty("$lib:3.4.1:natives-linux")
         }
 
@@ -499,9 +499,11 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         }
 
         // Minecraft 26.1-snapshot-8+
-        for (lib in LWJGL.base1) {
+        for (lib in LWJGL.base2) {
             redirect("$lib:3.4.1", mavenLibrary("$lib:3.4.1"))
-            redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-linux-riscv64"))
+            if (lib != LWJGL.VULKAN) {
+                redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-linux-riscv64"))
+            }
         }
 
         redirect("com.github.oshi:oshi-core:6.6.5", mavenLibrary("com.github.oshi:oshi-core:6.8.0"))
@@ -651,9 +653,12 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         }
 
         // Minecraft 26.1-snapshot-8+
-        for (lib in LWJGL.base1) {
+        for (lib in LWJGL.base2) {
             redirect("$lib:3.4.1", mavenLibrary("$lib:3.4.1"))
-            redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-freebsd"))
+
+            if (lib != LWJGL.VULKAN) {
+                redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-freebsd"))
+            }
         }
 
         redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
