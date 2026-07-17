@@ -30,6 +30,8 @@ enum class LWJGL(isBase: Boolean = false) {
     SPVC,
     VMA,
     VULKAN,
+
+    SDL
     ;
 
     val artifactId: String = if (isBase) "lwjgl" else "lwjgl-" + name.lowercase()
@@ -44,6 +46,8 @@ enum class LWJGL(isBase: Boolean = false) {
         val base1 = base0 + FREETYPE
 
         // 26.2-snapshot-1+
-        val base2 = base1 + listOf(SHADERC, SPVC, VMA, VULKAN)
+        val base2 = base1 + listOf(SHADERC, SPVC, VMA, VULKAN,
+            // 26.3-snapshot-4+
+            SDL)
     }
 }
