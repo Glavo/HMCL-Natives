@@ -32,6 +32,7 @@ buildscript {
 plugins {
     id("java")
     id("org.glavo.load-maven-publish-properties") version "0.1.0"
+    id("org.glavo.gradle-wrapper-neo") version "0.2.0"
 }
 
 allprojects {
