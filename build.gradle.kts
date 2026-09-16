@@ -164,16 +164,22 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             redirect("$lib:3.3.3:natives-linux", mavenLibrary("$lib:3.3.3:natives-linux-arm64"))
         }
 
-        // Minecraft 26.1-snapshot-8+
+        // Minecraft 26.1-snapshot-8~26.3-snapshot-4
         for (lib in LWJGL.base2) {
             if (lib != LWJGL.VULKAN)
                 redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-linux-arm64"))
         }
 
-        // Minecraft 26.3-snapshot-5+
+        // Minecraft 26.3-snapshot-5~26.3-snapshot-9
         for (lib in LWJGL.base2) {
             if (lib != LWJGL.VULKAN)
                 redirect("$lib:3.4.2:natives-linux", mavenLibrary("$lib:3.4.2:natives-linux-arm64"))
+        }
+
+        // Minecraft 26.3-snapshot-10+
+        for (lib in LWJGL.base2) {
+            if (lib != LWJGL.VULKAN)
+                redirect("$lib:3.4.3:natives-linux", mavenLibrary("$lib:3.4.3:natives-linux-arm64"))
         }
 
         // Minecraft 1.6~1.12
@@ -384,7 +390,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
                 redirectToEmpty("$lib:3.3.3:natives-linux")
         }
 
-        // Minecraft 26.1-snapshot-8+
+        // Minecraft 26.1-snapshot-8~26.3-snapshot-4
         for (lib in LWJGL.base2) {
             if (lib == LWJGL.BASE)
                 redirect("$lib:3.4.1:natives-linux", lwjglNatives("linux", "loongarch64", "3.4.1-rc1"))
@@ -392,13 +398,22 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
                 redirectToEmpty("$lib:3.4.1:natives-linux")
         }
 
-        // Minecraft 26.3-snapshot-5+
+        // Minecraft 26.3-snapshot-5~26.3-snapshot-9
         for (lib in LWJGL.base2) {
             redirect("$lib:3.4.2", mavenLibrary("$lib:3.4.1"))
             if (lib == LWJGL.BASE)
                 redirect("$lib:3.4.2:natives-linux", lwjglNatives("linux", "loongarch64", "3.4.1-rc1"))
             else if (lib != LWJGL.VULKAN)
                 redirectToEmpty("$lib:3.4.2:natives-linux")
+        }
+
+        // Minecraft 26.3-snapshot-10+
+        for (lib in LWJGL.base2) {
+            redirect("$lib:3.4.3", mavenLibrary("$lib:3.4.1"))
+            if (lib == LWJGL.BASE)
+                redirect("$lib:3.4.3:natives-linux", lwjglNatives("linux", "loongarch64", "3.4.1-rc1"))
+            else if (lib != LWJGL.VULKAN)
+                redirectToEmpty("$lib:3.4.3:natives-linux")
         }
 
         // JNA
@@ -514,7 +529,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             redirect("$lib:3.3.3:natives-linux", mavenLibrary("$lib:3.3.4:natives-linux-riscv64"))
         }
 
-        // Minecraft 26.1-snapshot-8+
+        // Minecraft 26.1-snapshot-8~26.3-snapshot-4
         for (lib in LWJGL.base2) {
             redirect("$lib:3.4.1", mavenLibrary("$lib:3.4.1"))
             if (lib != LWJGL.VULKAN) {
@@ -522,10 +537,16 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             }
         }
 
-        // Minecraft 26.3-snapshot-5+
+        // Minecraft 26.3-snapshot-5~26.3-snapshot-9
         for (lib in LWJGL.base2) {
             if (lib != LWJGL.VULKAN)
                 redirect("$lib:3.4.2:natives-linux", mavenLibrary("$lib:3.4.2:natives-linux-riscv64"))
+        }
+
+        // Minecraft 26.3-snapshot-10+
+        for (lib in LWJGL.base2) {
+            if (lib != LWJGL.VULKAN)
+                redirect("$lib:3.4.3:natives-linux", mavenLibrary("$lib:3.4.3:natives-linux-riscv64"))
         }
 
         redirect("com.github.oshi:oshi-core:6.6.5", mavenLibrary("com.github.oshi:oshi-core:6.8.0"))
@@ -674,7 +695,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             redirect("$lib:3.3.3:natives-linux", mavenLibrary("$lib:$lwjgl3Version:natives-freebsd"))
         }
 
-        // Minecraft 26.1-snapshot-8+
+        // Minecraft 26.1-snapshot-8~26.3-snapshot-4
         for (lib in LWJGL.base2) {
             redirect("$lib:3.4.1", mavenLibrary("$lib:3.4.1"))
 
@@ -683,10 +704,16 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             }
         }
 
-        // Minecraft 26.3-snapshot-5+
+        // Minecraft 26.3-snapshot-5~26.3-snapshot-9
         for (lib in LWJGL.base2) {
             if (lib != LWJGL.VULKAN)
                 redirect("$lib:3.4.2:natives-linux", mavenLibrary("$lib:3.4.2:natives-freebsd"))
+        }
+
+        // Minecraft 26.3-snapshot-10+
+        for (lib in LWJGL.base2) {
+            if (lib != LWJGL.VULKAN)
+                redirect("$lib:3.4.3:natives-linux", mavenLibrary("$lib:3.4.3:natives-freebsd"))
         }
 
         redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
