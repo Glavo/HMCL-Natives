@@ -131,6 +131,10 @@ val allLinuxText2speech = arrayOf(
 val mojangFreeType = "${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0"
 
 fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
+    "linux-x86_64" to buildRedirectMap {
+        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary(mojangFreeType, repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3:natives-linux", mavenLibrary("$mojangFreeType:natives-linux", repo = MavenRepo.MOJANG))
+    },
     "linux-arm64" to buildRedirectMap {
         // Minecraft 1.13
         for (lib in LWJGL.base0) {
@@ -561,6 +565,8 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         redirectAllToEmpty(*allLinuxText2speech)
     },
     "windows-x86_64" to buildRedirectMap {
+        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary(mojangFreeType, repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3:natives-windows", mavenLibrary("$mojangFreeType:natives-windows", repo = MavenRepo.MOJANG))
         redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.2.6:x64"))
         redirect("software-renderer-loader", mavenLibrary("org.glavo:llvmpipe-loader:1.0"))
     },
@@ -568,6 +574,9 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.2.6:x86"))
     },
     "windows-arm64" to buildRedirectMap {
+        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary(mojangFreeType, repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3:natives-windows-arm64", mavenLibrary("$mojangFreeType:natives-windows-arm64", repo = MavenRepo.MOJANG))
+
         // Minecraft 1.6~1.12
         val lwjgl2Natives = lwjglNatives("windows", "arm64", "2.9.3-rc1")
 
@@ -607,7 +616,14 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
 
         redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.2.6:arm64"))
     },
+    "macos-x86_64" to buildRedirectMap {
+        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary(mojangFreeType, repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3:natives-macos", mavenLibrary("$mojangFreeType:natives-macos", repo = MavenRepo.MOJANG))
+    },
     "macos-arm64" to buildRedirectMap {
+        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary(mojangFreeType, repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3:natives-macos-arm64", mavenLibrary("$mojangFreeType:natives-macos-arm64", repo = MavenRepo.MOJANG))
+
         // Minecraft 1.6~1.12
         val lwjgl2Natives = lwjglNatives("osx", "arm64", "2.9.3-rc1")
 
