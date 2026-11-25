@@ -128,6 +128,8 @@ val allLinuxText2speech = arrayOf(
     "com.mojang:text2speech:1.13.9:natives-linux"
 )
 
+val mojangFreeType = "${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0"
+
 fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
     "linux-arm64" to buildRedirectMap {
         // Minecraft 1.13
@@ -181,6 +183,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             if (lib != LWJGL.VULKAN)
                 redirect("$lib:3.4.3:natives-linux", mavenLibrary("$lib:3.4.3:natives-linux-arm64"))
         }
+        redirect("$mojangFreeType:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.3:natives-linux-arm64"))
 
         // Minecraft 1.6~1.12
         val lwjgl2Natives = lwjglNatives("linux", "arm64", "2.9.3")
@@ -415,6 +418,8 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             else if (lib != LWJGL.VULKAN)
                 redirectToEmpty("$lib:3.4.3:natives-linux")
         }
+        redirect(mojangFreeType, mavenLibrary("${LWJGL.FREETYPE}:3.4.1"))
+        redirectToEmpty("$mojangFreeType:natives-linux")
 
         // JNA
         val jna = mavenLibrary("net.java.dev.jna:jna:5.13.0");
@@ -548,6 +553,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             if (lib != LWJGL.VULKAN)
                 redirect("$lib:3.4.3:natives-linux", mavenLibrary("$lib:3.4.3:natives-linux-riscv64"))
         }
+        redirect("$mojangFreeType:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.3:natives-linux-riscv64"))
 
         redirect("com.github.oshi:oshi-core:6.6.5", mavenLibrary("com.github.oshi:oshi-core:6.8.0"))
 
@@ -555,11 +561,11 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         redirectAllToEmpty(*allLinuxText2speech)
     },
     "windows-x86_64" to buildRedirectMap {
-        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.0.4:x64"))
+        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.2.6:x64"))
         redirect("software-renderer-loader", mavenLibrary("org.glavo:llvmpipe-loader:1.0"))
     },
     "windows-x86" to buildRedirectMap {
-        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.0.4:x86"))
+        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.2.6:x86"))
     },
     "windows-arm64" to buildRedirectMap {
         // Minecraft 1.6~1.12
@@ -599,7 +605,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             "com.mojang:text2speech:1.13.9:natives-windows"
         )
 
-        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.0.4:arm64"))
+        redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.2.6:arm64"))
     },
     "macos-arm64" to buildRedirectMap {
         // Minecraft 1.6~1.12
@@ -715,6 +721,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             if (lib != LWJGL.VULKAN)
                 redirect("$lib:3.4.3:natives-linux", mavenLibrary("$lib:3.4.3:natives-freebsd"))
         }
+        redirect("$mojangFreeType:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.3:natives-freebsd"))
 
         redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
         redirectAllToEmpty(*allLinuxText2speech)
