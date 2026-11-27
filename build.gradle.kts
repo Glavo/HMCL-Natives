@@ -128,12 +128,12 @@ val allLinuxText2speech = arrayOf(
     "com.mojang:text2speech:1.13.9:natives-linux"
 )
 
-val mojangFreeType = "${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0"
-
 fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
     "linux-x86_64" to buildRedirectMap {
-        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary(mojangFreeType, repo = MavenRepo.MOJANG))
-        redirect("${LWJGL.FREETYPE}:3.4.3:natives-linux", mavenLibrary("$mojangFreeType:natives-linux", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.1", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.1:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3:natives-linux", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0:natives-linux", repo = MavenRepo.MOJANG))
     },
     "linux-arm64" to buildRedirectMap {
         // Minecraft 1.13
@@ -175,6 +175,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             if (lib != LWJGL.VULKAN)
                 redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-linux-arm64"))
         }
+        redirect("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.1:natives-linux-arm64"))
 
         // Minecraft 26.3-snapshot-5~26.3-snapshot-9
         for (lib in LWJGL.base2) {
@@ -187,7 +188,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             if (lib != LWJGL.VULKAN)
                 redirect("$lib:3.4.3:natives-linux", mavenLibrary("$lib:3.4.3:natives-linux-arm64"))
         }
-        redirect("$mojangFreeType:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.3:natives-linux-arm64"))
+        redirect("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.3:natives-linux-arm64"))
 
         // Minecraft 1.6~1.12
         val lwjgl2Natives = lwjglNatives("linux", "arm64", "2.9.3")
@@ -404,6 +405,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             else if (lib != LWJGL.VULKAN)
                 redirectToEmpty("$lib:3.4.1:natives-linux")
         }
+        redirectToEmpty("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3:natives-linux")
 
         // Minecraft 26.3-snapshot-5~26.3-snapshot-9
         for (lib in LWJGL.base2) {
@@ -422,8 +424,8 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             else if (lib != LWJGL.VULKAN)
                 redirectToEmpty("$lib:3.4.3:natives-linux")
         }
-        redirect(mojangFreeType, mavenLibrary("${LWJGL.FREETYPE}:3.4.1"))
-        redirectToEmpty("$mojangFreeType:natives-linux")
+        redirect("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0", mavenLibrary("${LWJGL.FREETYPE}:3.4.1"))
+        redirectToEmpty("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0:natives-linux")
 
         // JNA
         val jna = mavenLibrary("net.java.dev.jna:jna:5.13.0");
@@ -545,6 +547,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
                 redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-linux-riscv64"))
             }
         }
+        redirect("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.1:natives-linux-riscv64"))
 
         // Minecraft 26.3-snapshot-5~26.3-snapshot-9
         for (lib in LWJGL.base2) {
@@ -557,7 +560,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             if (lib != LWJGL.VULKAN)
                 redirect("$lib:3.4.3:natives-linux", mavenLibrary("$lib:3.4.3:natives-linux-riscv64"))
         }
-        redirect("$mojangFreeType:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.3:natives-linux-riscv64"))
+        redirect("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.3:natives-linux-riscv64"))
 
         redirect("com.github.oshi:oshi-core:6.6.5", mavenLibrary("com.github.oshi:oshi-core:6.8.0"))
 
@@ -565,17 +568,23 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         redirectAllToEmpty(*allLinuxText2speech)
     },
     "windows-x86_64" to buildRedirectMap {
-        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary(mojangFreeType, repo = MavenRepo.MOJANG))
-        redirect("${LWJGL.FREETYPE}:3.4.3:natives-windows", mavenLibrary("$mojangFreeType:natives-windows", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.1", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.1:natives-windows", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3:natives-windows", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3:natives-windows", mavenLibrary("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0:natives-windows", repo = MavenRepo.MOJANG))
         redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.2.6:x64"))
         redirect("software-renderer-loader", mavenLibrary("org.glavo:llvmpipe-loader:1.0"))
     },
     "windows-x86" to buildRedirectMap {
+        redirect("${LWJGL.FREETYPE}:3.4.1", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.1:natives-windows-x86", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3:natives-windows-x86", repo = MavenRepo.MOJANG))
         redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.2.6:x86"))
     },
     "windows-arm64" to buildRedirectMap {
-        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary(mojangFreeType, repo = MavenRepo.MOJANG))
-        redirect("${LWJGL.FREETYPE}:3.4.3:natives-windows-arm64", mavenLibrary("$mojangFreeType:natives-windows-arm64", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.1", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.1:natives-windows-arm64", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3:natives-windows-arm64", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3:natives-windows-arm64", mavenLibrary("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0:natives-windows-arm64", repo = MavenRepo.MOJANG))
 
         // Minecraft 1.6~1.12
         val lwjgl2Natives = lwjglNatives("windows", "arm64", "2.9.3-rc1")
@@ -617,12 +626,16 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
         redirect("mesa-loader", mavenLibrary("org.glavo:mesa-loader-windows:26.2.6:arm64"))
     },
     "macos-x86_64" to buildRedirectMap {
-        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary(mojangFreeType, repo = MavenRepo.MOJANG))
-        redirect("${LWJGL.FREETYPE}:3.4.3:natives-macos", mavenLibrary("$mojangFreeType:natives-macos", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.1", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.1:natives-macos", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3:natives-macos", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3:natives-macos", mavenLibrary("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0:natives-macos", repo = MavenRepo.MOJANG))
     },
     "macos-arm64" to buildRedirectMap {
-        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary(mojangFreeType, repo = MavenRepo.MOJANG))
-        redirect("${LWJGL.FREETYPE}:3.4.3:natives-macos-arm64", mavenLibrary("$mojangFreeType:natives-macos-arm64", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.1", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.1:natives-macos-arm64", mavenLibrary("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3:natives-macos-arm64", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3", mavenLibrary("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0", repo = MavenRepo.MOJANG))
+        redirect("${LWJGL.FREETYPE}:3.4.3:natives-macos-arm64", mavenLibrary("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0:natives-macos-arm64", repo = MavenRepo.MOJANG))
 
         // Minecraft 1.6~1.12
         val lwjgl2Natives = lwjglNatives("osx", "arm64", "2.9.3-rc1")
@@ -725,6 +738,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
                 redirect("$lib:3.4.1:natives-linux", mavenLibrary("$lib:3.4.1:natives-freebsd"))
             }
         }
+        redirect("${LWJGL.FREETYPE}:3.4.1-mojang-2.15.0.3:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.1:natives-freebsd"))
 
         // Minecraft 26.3-snapshot-5~26.3-snapshot-9
         for (lib in LWJGL.base2) {
@@ -737,7 +751,7 @@ fun generate(): Map<String, Map<String, MavenLibrary?>> = mapOf(
             if (lib != LWJGL.VULKAN)
                 redirect("$lib:3.4.3:natives-linux", mavenLibrary("$lib:3.4.3:natives-freebsd"))
         }
-        redirect("$mojangFreeType:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.3:natives-freebsd"))
+        redirect("${LWJGL.FREETYPE}:3.4.3-mojang-2.15.0:natives-linux", mavenLibrary("${LWJGL.FREETYPE}:3.4.3:natives-freebsd"))
 
         redirectToEmpty("net.java.jinput:jinput-platform:2.0.5:natives")
         redirectAllToEmpty(*allLinuxText2speech)
